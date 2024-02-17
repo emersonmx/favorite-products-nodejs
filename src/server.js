@@ -16,3 +16,10 @@ app.get('/', (req, res) => {
 const server = app.listen(port, host, () => {
   console.log(`Listening on ${host}:${port}`)
 })
+
+process.on('SIGTERM', () => {
+  console.log('Closing server')
+  server.close(() => {
+    console.log('Server closed')
+  })
+})
