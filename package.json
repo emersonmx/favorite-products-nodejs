@@ -4,8 +4,8 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "start": "node ./build/app.js",
-        "dev": "nodemon ./src/app.js",
+        "start": "node ./build/server.js",
+        "dev": "nodemon ./src/server.js",
         "test": "jest",
         "fmt": "eslint --fix .",
         "lint": "eslint ."
