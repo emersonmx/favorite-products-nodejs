@@ -2,9 +2,7 @@ import express from 'express'
 import helmet from 'helmet'
 import cors from 'cors'
 import { router } from './routes/index.js'
-
-const host = '127.0.0.1'
-const port = 3000
+import config from './config.js'
 
 const app = express()
 
@@ -14,8 +12,8 @@ app.use(cors())
 
 app.use('/', router)
 
-const server = app.listen(port, host, () => {
-  console.log(`Listening on ${host}:${port}`)
+const server = app.listen(config.port, config.host, () => {
+  console.log(`Listening on ${config.host}:${config.port}`)
 })
 
 process.on('SIGTERM', () => {
