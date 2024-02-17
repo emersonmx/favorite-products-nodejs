@@ -1,5 +1,6 @@
 import express from 'express'
 import helmet from 'helmet'
+import cors from 'cors'
 import { router } from './routes/index.js'
 
 const host = '127.0.0.1'
@@ -8,7 +9,8 @@ const port = 3000
 const app = express()
 
 app.use(helmet())
-  .use(express.json())
+app.use(express.json())
+app.use(cors())
 
 app.use('/', router)
 
