@@ -7,6 +7,7 @@ const port = 3000
 const app = express()
 
 app.use(helmet())
+  .use(express.json())
 
 app.get('/', (req, res) => {
   res.send('Hello, World!')
