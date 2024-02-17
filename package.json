@@ -16,13 +16,20 @@
         "helmet": "^7.1.0"
     },
     "devDependencies": {
+        "@babel/core": "^7.23.9",
+        "@babel/preset-env": "^7.23.9",
+        "babel-jest": "^29.7.0",
         "eslint": "^8.56.0",
         "eslint-config-standard": "^17.1.0",
         "eslint-plugin-import": "^2.29.1",
-        "eslint-plugin-jest": "^27.9.0",
         "eslint-plugin-n": "^16.6.2",
         "eslint-plugin-promise": "^6.1.1",
         "jest": "^29.7.0",
         "nodemon": "^3.0.3"
+    },
+    "jest": {
+        "transform": {
+            "^.+\\.[t|j]sx?$": "babel-jest"
+        }
     }
 }
