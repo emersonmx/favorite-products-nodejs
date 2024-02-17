@@ -15,6 +15,13 @@ module.exports = {
       parserOptions: {
         sourceType: 'script'
       }
+    },
+    {
+      files: ['**/*.test.js'],
+      plugins: ['jest'],
+      env: {
+        'jest/globals': true
+      }
     }
   ],
   parserOptions: {
