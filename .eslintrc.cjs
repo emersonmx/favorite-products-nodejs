@@ -17,7 +17,7 @@ module.exports = {
       }
     },
     {
-      files: ['**/*.test.js'],
+      files: ['tests/**/*'],
       plugins: ['jest'],
       env: {
         'jest/globals': true
