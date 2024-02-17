@@ -13,6 +13,6 @@ app.get('/', (req, res) => {
   res.send('Hello, World!')
 })
 
-app.listen(port, () => {
+const server = app.listen(port, host, () => {
   console.log(`Listening on ${host}:${port}`)
 })
