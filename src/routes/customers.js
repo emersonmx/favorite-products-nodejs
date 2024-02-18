@@ -1,20 +1,23 @@
 const express = require('express')
+const z = require('zod')
 
 const router = express.Router()
 
 const customers = new Map()
 
+const Customer = z.object({
+  name: z.string().min(1),
+  email: z.string().email()
+})
+
 router.post('/', async (req, res) => {
   const id = crypto.randomUUID()
-  const { name, email } = req.body
 
-  if (name === null || name === undefined || (typeof name === 'string' && name.length === 0)) {
+  const validCustomer = Customer.safeParse(req.body)
+  if (!validCustomer.success) {
     return res.status(400).end()
   }
-
-  if (email === null || email === undefined || (typeof email === 'string' && email.length === 0)) {
-    return res.status(400).end()
-  }
+  const { name, email } = validCustomer.data
 
   customers.set(id, { id, name, email })
   res.status(201).location(`http://localhost:3000/customers/${id}`).end()
@@ -35,14 +38,11 @@ router.put('/:id', async (req, res) => {
     return res.status(404).end()
   }
 
-  const { name, email } = req.body
-  if (name === null || name === undefined || (typeof name === 'string' && name.length === 0)) {
+  const validCustomer = Customer.safeParse(req.body)
+  if (!validCustomer.success) {
     return res.status(400).end()
   }
-
-  if (email === null || email === undefined || (typeof email === 'string' && email.length === 0)) {
-    return res.status(400).end()
-  }
+  const { name, email } = validCustomer.data
 
   customers.set(id, { id, name, email })
   res.status(200).end()
