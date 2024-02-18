@@ -66,33 +66,33 @@ describe('input errors', () => {
   })
 
   describe('create', () => {
-    test('should return 400 when undefined name', async () => {
+    it('should return 400 when undefined name', async () => {
       const res = await axios.post('/customers', { email: 'john@example.com' })
 
       expect(res.status).toBe(400)
     })
-    test('should return 400 when null name', async () => {
+    it('should return 400 when null name', async () => {
       const res = await axios.post('/customers', { name: null, email: 'john@example.com' })
 
       expect(res.status).toBe(400)
     })
-    test('should return 400 when empty name', async () => {
+    it('should return 400 when empty name', async () => {
       const res = await axios.post('/customers', { name: '', email: 'john@example.com' })
 
       expect(res.status).toBe(400)
     })
 
-    test('should return 400 when undefined email', async () => {
+    it('should return 400 when undefined email', async () => {
       const res = await axios.post('/customers', { name: 'John' })
 
       expect(res.status).toBe(400)
     })
-    test('should return 400 when null email', async () => {
+    it('should return 400 when null email', async () => {
       const res = await axios.post('/customers', { name: 'John', email: null })
 
       expect(res.status).toBe(400)
     })
-    test('should return 400 when empty email', async () => {
+    it('should return 400 when empty email', async () => {
       const res = await axios.post('/customers', { name: 'John', email: '' })
 
       expect(res.status).toBe(400)
@@ -100,53 +100,53 @@ describe('input errors', () => {
   })
 
   describe('show', () => {
-    test('should return 404 when id not found', async () => {
+    it('should return 404 when id not found', async () => {
       const res = await axios.get('/customers/an-invalid-id')
       expect(res.status).toBe(404)
     })
   })
 
   describe('update', () => {
-    test('should return 400 when undefined name', async () => {
+    it('should return 400 when undefined name', async () => {
       const res = await axios.put(createdUrl, { email: 'john@example.com' })
 
       expect(res.status).toBe(400)
     })
-    test('should return 400 when null name', async () => {
+    it('should return 400 when null name', async () => {
       const res = await axios.put(createdUrl, { name: null, email: 'john@example.com' })
 
       expect(res.status).toBe(400)
     })
-    test('should return 400 empty name', async () => {
+    it('should return 400 empty name', async () => {
       const res = await axios.put(createdUrl, { name: '', email: 'john@example.com' })
 
       expect(res.status).toBe(400)
     })
 
-    test('should return 400 when undefined email', async () => {
+    it('should return 400 when undefined email', async () => {
       const res = await axios.put(createdUrl, { name: 'John' })
 
       expect(res.status).toBe(400)
     })
-    test('should return 400 when null email', async () => {
+    it('should return 400 when null email', async () => {
       const res = await axios.put(createdUrl, { name: 'John', email: null })
 
       expect(res.status).toBe(400)
     })
-    test('should return 400 when empty email', async () => {
+    it('should return 400 when empty email', async () => {
       const res = await axios.put(createdUrl, { name: 'John', email: '' })
 
       expect(res.status).toBe(400)
     })
 
-    test('should return 404 when id not found', async () => {
+    it('should return 404 when id not found', async () => {
       const res = await axios.put('/customers/an-invalid-id', { name: 'John', email: 'john@example.com' })
       expect(res.status).toBe(404)
     })
   })
 
   describe('delete', () => {
-    test('should return 404 when id not found', async () => {
+    it('should return 404 when id not found', async () => {
       const res = await axios.delete('/customers/an-invalid-id')
       expect(res.status).toBe(404)
     })
