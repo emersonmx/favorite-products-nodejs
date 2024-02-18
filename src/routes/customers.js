@@ -11,14 +11,13 @@ const Customer = z.object({
 })
 
 router.post('/', async (req, res) => {
-  const id = crypto.randomUUID()
-
   const validCustomer = Customer.safeParse(req.body)
   if (!validCustomer.success) {
     return res.status(400).end()
   }
-  const { name, email } = validCustomer.data
 
+  const id = crypto.randomUUID()
+  const { name, email } = validCustomer.data
   customers.set(id, { id, name, email })
 
   logger.info(`Customer ${id} was created`)
@@ -45,8 +44,8 @@ router.put('/:id', async (req, res) => {
   if (!validCustomer.success) {
     return res.status(400).end()
   }
-  const { name, email } = validCustomer.data
 
+  const { name, email } = validCustomer.data
   customers.set(id, { id, name, email })
 
   logger.info(`Customer ${id} was updated`)
