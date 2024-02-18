@@ -20,7 +20,7 @@ router.post('/', async (req, res) => {
   const { name, email } = validCustomer.data
 
   customers.set(id, { id, name, email })
-  res.status(201).location(`http://localhost:3000/customers/${id}`).end()
+  res.status(201).location(`/customers/${id}`).end()
 })
 
 router.get('/:id', async (req, res) => {
