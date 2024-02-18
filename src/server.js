@@ -2,7 +2,7 @@ const express = require('express')
 const helmet = require('helmet')
 const cors = require('cors')
 const compression = require('compression')
-const config = require('./config.js')
+const config = require('./config')
 
 const app = express()
 
