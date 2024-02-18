@@ -6,9 +6,7 @@ function getLogger(name) {
     format: winston.format.json(),
     defaultMeta: { service: name },
     transports: [
-      new winston.transports.Console({
-        format: winston.format.simple(),
-      })
+      new winston.transports.Console()
     ],
   });
   return logger
