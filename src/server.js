@@ -3,7 +3,9 @@ const helmet = require('helmet')
 const cors = require('cors')
 const compression = require('compression')
 const config = require('./config')
+const factories = require('./factories')
 
+const logger = factories.makeLogger()
 const app = express()
 
 app.use(helmet())
@@ -14,12 +16,12 @@ app.use(cors())
 app.use('/', require('./routes'))
 
 const server = app.listen(config.port, config.host, () => {
-  console.log(`Listening on ${config.host}:${config.port}`)
+  logger.info(`Listening on ${config.host}:${config.port}`)
 })
 
 process.on('SIGTERM', () => {
-  console.log('Closing server')
+  logger.info('Closing server')
   server.close(() => {
-    console.log('Server closed')
+    logger.info('Server closed')
   })
 })
