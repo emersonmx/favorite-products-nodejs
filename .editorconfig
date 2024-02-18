@@ -16,5 +16,5 @@ trim_trailing_whitespace = false
 [*.{yml,yaml}]
 indent_size = 2
 
-[*.js]
+[*.{js,cjs}]
 indent_size = 2
