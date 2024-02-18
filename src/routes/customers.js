@@ -7,6 +7,15 @@ const customers = new Map()
 router.post('/', async (req, res) => {
   const id = crypto.randomUUID()
   const { name, email } = req.body
+
+  if (name === null || name === undefined || (typeof name === 'string' && name.length === 0)) {
+    return res.status(400).end()
+  }
+
+  if (email === null || email === undefined || (typeof email === 'string' && email.length === 0)) {
+    return res.status(400).end()
+  }
+
   customers.set(id, { id, name, email })
   res.status(201).location(`http://localhost:3000/customers/${id}`).end()
 })
@@ -27,6 +36,14 @@ router.put('/:id', async (req, res) => {
   }
 
   const { name, email } = req.body
+  if (name === null || name === undefined || (typeof name === 'string' && name.length === 0)) {
+    return res.status(400).end()
+  }
+
+  if (email === null || email === undefined || (typeof email === 'string' && email.length === 0)) {
+    return res.status(400).end()
+  }
+
   customers.set(id, { id, name, email })
   res.status(200).end()
 })
