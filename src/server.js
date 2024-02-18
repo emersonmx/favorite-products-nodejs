@@ -11,7 +11,7 @@ app.use(compression())
 app.use(express.json())
 app.use(cors())
 
-app.use('/', require('./routes/index.js'))
+app.use('/', require('./routes'))
 
 const server = app.listen(config.port, config.host, () => {
   console.log(`Listening on ${config.host}:${config.port}`)
