@@ -1,6 +1,8 @@
 const express = require('express')
 const z = require('zod')
 
+const logger = require('../factories').makeLogger()
+
 const router = express.Router()
 
 const customers = new Map()
@@ -20,6 +22,9 @@ router.post('/', async (req, res) => {
   const { name, email } = validCustomer.data
 
   customers.set(id, { id, name, email })
+
+  logger.info(`Customer ${id} was created`)
+
   res.status(201).location(`/customers/${id}`).end()
 })
 
@@ -45,6 +50,9 @@ router.put('/:id', async (req, res) => {
   const { name, email } = validCustomer.data
 
   customers.set(id, { id, name, email })
+
+  logger.info(`Customer ${id} was updated`)
+
   res.status(200).end()
 })
 
@@ -55,6 +63,9 @@ router.delete('/:id', async (req, res) => {
   }
 
   customers.delete(id)
+
+  logger.info(`Customer ${id} was deleted`)
+
   res.status(200).end()
 })
 
