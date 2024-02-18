@@ -1,6 +1,7 @@
-import express from 'express'
-import { router as customers } from './customers.js'
+const express = require('express')
 
-export const router = express.Router()
+const router = express.Router()
 
-router.use('/customers', customers)
+router.use('/customers', require('./customers.js'))
+
+module.exports = router

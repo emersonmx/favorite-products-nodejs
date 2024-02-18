@@ -1,9 +1,8 @@
-import express from 'express'
-import helmet from 'helmet'
-import cors from 'cors'
-import compression from 'compression'
-import { router } from './routes/index.js'
-import config from './config.js'
+const express = require('express')
+const helmet = require('helmet')
+const cors = require('cors')
+const compression = require('compression')
+const config = require('./config.js')
 
 const app = express()
 
@@ -12,7 +11,7 @@ app.use(compression())
 app.use(express.json())
 app.use(cors())
 
-app.use('/', router)
+app.use('/', require('./routes/index.js'))
 
 const server = app.listen(config.port, config.host, () => {
   console.log(`Listening on ${config.host}:${config.port}`)

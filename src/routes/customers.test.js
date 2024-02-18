@@ -1,4 +1,4 @@
-import axios from 'axios'
+const axios = require('axios')
 
 test('create a new customer with name and email', async () => {
   const res = await axios.post('http://localhost:3000/customers', {
