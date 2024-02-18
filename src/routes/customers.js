@@ -2,9 +2,7 @@ const express = require('express')
 const z = require('zod')
 
 const logger = require('../factories').makeLogger()
-
 const router = express.Router()
-
 const customers = new Map()
 
 const Customer = z.object({
