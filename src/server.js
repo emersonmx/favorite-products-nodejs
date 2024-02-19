@@ -5,6 +5,7 @@ const fastify = require('fastify')({
 })
 
 fastify.register(require('@fastify/cors'))
+fastify.register(require('@fastify/helmet'))
 fastify.register(require('@fastify/swagger'), {
   swagger: {
     info: {
