@@ -5,7 +5,7 @@ const config = require('../config')
 
 const signSync = createSigner({ key: config.adminJwtSecret })
 
-const adminJwt = signSync({ name: 'jest' })
+const adminJwt = signSync({ name: 'jest', email: 'jest@example.com' })
 
 axios.defaults.baseURL = `http://${config.baseUrl}`
 axios.defaults.headers.common.Authorization = `Bearer ${adminJwt}`

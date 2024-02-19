@@ -14,6 +14,10 @@ module.exports = async (fastify, options) => {
     } catch (err) {
       reply.send(err)
     }
+
+    if (!config.adminEmails.includes(request.user.email)) {
+      reply.code(401).send()
+    }
   })
 
   const baseBodySchema = S.object()
