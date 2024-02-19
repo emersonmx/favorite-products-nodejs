@@ -1,9 +1,14 @@
 const axios = require('axios')
-const { expect } = require('@jest/globals')
+const { createSigner } = require('fast-jwt')
 
 const config = require('../config')
 
+const signSync = createSigner({ key: config.adminJwtSecret })
+
+const adminJwt = signSync({ name: 'jest' })
+
 axios.defaults.baseURL = `http://${config.baseUrl}`
+axios.defaults.headers.common.Authorization = `Bearer ${adminJwt}`
 axios.defaults.validateStatus = () => {
   return true
 }
@@ -207,5 +212,44 @@ describe('input errors', () => {
       const res = await axios.delete(`/customers/${invalidId}`)
       expect(res.status).toBe(404)
     })
+  })
+})
+
+describe('invalid JWT', () => {
+  let session
+
+  beforeAll(() => {
+    session = axios.create({
+      headers: {
+        Authorization: null
+      }
+    })
+  })
+
+  test('return 401 when create', async () => {
+    const res = await session.post('/customers', { name: 'John', email: 'john@example.com' })
+
+    expect(res.status).toBe(401)
+  })
+
+  test('return 401 when show', async () => {
+    const id = crypto.randomUUID()
+    const res = await session.get(`/customers/${id}`)
+
+    expect(res.status).toBe(401)
+  })
+
+  test('return 401 when update', async () => {
+    const id = crypto.randomUUID()
+    const res = await session.put(`/customers/${id}`, { name: 'John Doe', email: 'johndoe@example.com' })
+
+    expect(res.status).toBe(401)
+  })
+
+  test('return 401 when delete', async () => {
+    const id = crypto.randomUUID()
+    const res = await session.delete(`/customers/${id}`)
+
+    expect(res.status).toBe(401)
   })
 })
