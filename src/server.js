@@ -1,7 +1,23 @@
+const config = require('./config')
+
 const fastify = require('fastify')({
   logger: true
 })
-const config = require('./config')
+
+fastify.register(require('@fastify/cors'))
+fastify.register(require('@fastify/swagger'), {
+  swagger: {
+    info: {
+      title: 'Favorite Products',
+      description: 'An API to favorite and unfavorite customer products.',
+      version: '0.1.0'
+    },
+    host: config.baseUrl
+  }
+})
+fastify.register(require('@fastify/swagger-ui'), {
+  routePrefix: '/docs',
+})
 
 fastify.register(require('./routes'))
 

@@ -7,11 +7,11 @@ module.exports = async (fastify, options) => {
     .prop('name', S.string().minLength(1).required())
     .prop('email', S.string().format(S.FORMATS.EMAIL).required())
   const paramsSchema = S.object()
-    .prop('id', S.string().format('uuid').required())
+    .prop('id', S.string().format(S.FORMATS.UUID).required())
   const responseSchema = S.object()
-    .prop('id', S.string())
+    .prop('id', S.string().format(S.FORMATS.UUID))
     .prop('name', S.string())
-    .prop('email', S.string())
+    .prop('email', S.string().format(S.FORMATS.EMAIL))
 
   fastify.get('/:id', {
     schema: {
