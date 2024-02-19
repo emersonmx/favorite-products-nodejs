@@ -9,7 +9,7 @@ fastify.register(require('@fastify/swagger'), {
   swagger: {
     info: {
       title: 'Favorite Products',
-      description: 'An API to favorite and unfavorite customer products.',
+      description: 'An API to favorite customer products.',
       version: config.version
     },
     host: config.baseUrl,
