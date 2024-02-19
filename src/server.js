@@ -12,7 +12,9 @@ fastify.register(require('@fastify/swagger'), {
       description: 'An API to favorite and unfavorite customer products.',
       version: config.version
     },
-    host: config.baseUrl
+    host: config.baseUrl,
+    consumes: ['application/json'],
+    produces: ['application/json'],
   }
 })
 fastify.register(require('@fastify/swagger-ui'), {
