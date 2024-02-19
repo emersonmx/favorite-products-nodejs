@@ -1,4 +1,4 @@
-# favorite-products-expressjs
+# favorite-products-nodejs
 
 ## Decisões
 
