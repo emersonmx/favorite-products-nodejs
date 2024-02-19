@@ -1,27 +1,15 @@
-const express = require('express')
-const helmet = require('helmet')
-const cors = require('cors')
-const compression = require('compression')
-const config = require('./config')
-const factories = require('./factories')
-
-const logger = factories.makeLogger()
-const app = express()
-
-app.use(helmet())
-app.use(compression())
-app.use(express.json())
-app.use(cors())
-
-app.use('/', require('./routes'))
-
-const server = app.listen(config.port, config.host, () => {
-  logger.info(`Listening on ${config.host}:${config.port}`)
+const fastify = require('fastify')({
+  logger: true
 })
+const config = require('./config')
 
-process.on('SIGTERM', () => {
-  logger.info('Closing server')
-  server.close(() => {
-    logger.info('Server closed')
-  })
+fastify.register(require('./routes'))
+
+fastify.listen({ host: config.host, port: config.port }, (err, address) => {
+  if (err) {
+    fastify.log.error(err)
+    process.exit(1)
+  } else {
+    fastify.log.info(`Listening on ${address}`)
+  }
 })

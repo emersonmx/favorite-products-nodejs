@@ -101,7 +101,8 @@ describe('input errors', () => {
 
   describe('show', () => {
     it('should return 404 when id not found', async () => {
-      const res = await axios.get('/customers/an-invalid-id')
+      const invalidId = crypto.randomUUID()
+      const res = await axios.get(`/customers/${invalidId}`)
       expect(res.status).toBe(404)
     })
   })
@@ -140,14 +141,16 @@ describe('input errors', () => {
     })
 
     it('should return 404 when id not found', async () => {
-      const res = await axios.put('/customers/an-invalid-id', { name: 'John', email: 'john@example.com' })
+      const invalidId = crypto.randomUUID()
+      const res = await axios.put(`/customers/${invalidId}`, { name: 'John', email: 'john@example.com' })
       expect(res.status).toBe(404)
     })
   })
 
   describe('delete', () => {
     it('should return 404 when id not found', async () => {
-      const res = await axios.delete('/customers/an-invalid-id')
+      const invalidId = crypto.randomUUID()
+      const res = await axios.delete(`/customers/${invalidId}`)
       expect(res.status).toBe(404)
     })
   })

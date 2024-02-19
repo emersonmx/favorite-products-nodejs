@@ -1,69 +1,88 @@
-const express = require('express')
-const z = require('zod')
+const S = require('fluent-json-schema')
 
-const logger = require('../factories').makeLogger()
-const router = express.Router()
 const customers = new Map()
 
-const Customer = z.object({
-  name: z.string().min(1),
-  email: z.string().email()
-})
+module.exports = async (fastify, options) => {
+  const baseBodySchema = S.object()
+    .prop('name', S.string().minLength(1).required())
+    .prop('email', S.string().format(S.FORMATS.EMAIL).required())
+  const paramsSchema = S.object()
+    .prop('id', S.string().format('uuid').required())
+  const responseSchema = S.object()
+    .prop('id', S.string())
+    .prop('name', S.string())
+    .prop('email', S.string())
 
-router.post('/', async (req, res) => {
-  const validCustomer = Customer.safeParse(req.body)
-  if (!validCustomer.success) {
-    return res.status(400).end()
-  }
+  fastify.get('/:id', {
+    schema: {
+      params: paramsSchema,
+      response: {
+        200: responseSchema
+      }
+    }
+  }, async (request, reply) => {
+    const { id } = request.params
+    if (!customers.has(id)) {
+      return reply.code(404).send()
+    }
 
-  const id = crypto.randomUUID()
-  const { name, email } = validCustomer.data
-  customers.set(id, { id, name, email })
+    return customers.get(id)
+  })
 
-  logger.info(`Customer ${id} was created`)
+  fastify.post('/', {
+    schema: {
+      body: baseBodySchema,
+      response: {
+        201: responseSchema
+      }
+    }
+  }, async (request, reply) => {
+    const id = crypto.randomUUID()
+    const { name, email } = request.body
 
-  res.status(201).location(`/customers/${id}`).end()
-})
+    customers.set(id, { id, name, email })
 
-router.get('/:id', async (req, res) => {
-  const { id } = req.params
-  if (!customers.has(id)) {
-    return res.status(404).end()
-  }
+    reply
+      .code(201)
+      .header('location', encodeURI(`/customers/${id}`))
+      .send({ id, name, email })
+  })
 
-  res.status(200).send(customers.get(id))
-})
+  fastify.put('/:id', {
+    schema: {
+      params: paramsSchema,
+      body: baseBodySchema,
+      response: {
+        200: responseSchema
+      }
+    }
+  }, async (request, reply) => {
+    const { id } = request.params
+    if (!customers.has(id)) {
+      return reply.code(404).send()
+    }
 
-router.put('/:id', async (req, res) => {
-  const { id } = req.params
-  if (!customers.has(id)) {
-    return res.status(404).end()
-  }
+    const { name, email } = request.body
+    customers.set(id, { id, name, email })
 
-  const validCustomer = Customer.safeParse(req.body)
-  if (!validCustomer.success) {
-    return res.status(400).end()
-  }
+    return customers.get(id)
+  })
 
-  const { name, email } = validCustomer.data
-  customers.set(id, { id, name, email })
+  fastify.delete('/:id', {
+    schema: {
+      params: paramsSchema,
+      response: {
+        200: responseSchema
+      }
+    }
+  }, async (request, reply) => {
+    const { id } = request.params
+    if (!customers.has(id)) {
+      return reply.code(404).send()
+    }
 
-  logger.info(`Customer ${id} was updated`)
+    customers.delete(id)
 
-  res.status(200).end()
-})
-
-router.delete('/:id', async (req, res) => {
-  const { id } = req.params
-  if (!customers.has(id)) {
-    return res.status(404).end()
-  }
-
-  customers.delete(id)
-
-  logger.info(`Customer ${id} was deleted`)
-
-  res.status(200).end()
-})
-
-module.exports = router
+    reply.send()
+  })
+}

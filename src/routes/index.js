@@ -1,7 +1,7 @@
-const express = require('express')
+async function routes(fastify, options) {
+  fastify.register(require('./customers'), {
+    prefix: '/customers'
+  })
+}
 
-const router = express.Router()
-
-router.use('/customers', require('./customers'))
-
-module.exports = router
+module.exports = routes
