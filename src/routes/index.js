@@ -1,7 +1,5 @@
-async function routes(fastify, options) {
+module.exports = async (fastify, opts) => {
   fastify.register(require('./customers'), {
     prefix: '/customers'
   })
 }
-
-module.exports = routes
