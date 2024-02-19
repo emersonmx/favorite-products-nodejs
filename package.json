@@ -3,8 +3,8 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "build": "babel --delete-dir-on-start ./src -d ./build",
-        "start": "fastify start ./build/server.js",
+        "build": "babel --delete-dir-on-start --ignore '**/*.test.js' ./src -d ./build",
+        "start": "node ./build/server.js",
         "dev": "nodemon ./src/server.js",
         "test": "jest",
         "fmt": "eslint --fix .",
@@ -19,7 +19,6 @@
         "@fastify/swagger-ui": "^3.0.0",
         "axios": "^1.6.7",
         "fastify": "^4.26.1",
-        "fastify-cli": "^6.1.1",
         "fluent-json-schema": "^4.2.1"
     },
     "devDependencies": {
