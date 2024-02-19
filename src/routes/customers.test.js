@@ -50,6 +50,58 @@ describe('happy path', () => {
   })
 })
 
+describe('response format', () => {
+  let resCreate
+
+  beforeAll(async () => {
+    resCreate = await axios.post('/customers', {
+      name: 'John',
+      email: 'john@example.com'
+    })
+  })
+
+  afterAll(async () => {
+    await axios.delete(resCreate.headers.location)
+  })
+
+  test('check create', async () => {
+    expect(resCreate.data).toMatchObject({
+      id: expect.any(String),
+      name: expect.any(String),
+      email: expect.any(String),
+    })
+  })
+
+  test('check show', async () => {
+    const res = await axios.get(resCreate.headers.location)
+
+    expect(res.data).toMatchObject({
+      id: expect.any(String),
+      name: expect.any(String),
+      email: expect.any(String),
+    })
+
+  })
+  test('check update', async () => {
+    const res = await axios.put(resCreate.headers.location, {
+      name: 'John Doe',
+      email: 'johndoe@example.com'
+    })
+
+    expect(res.data).toMatchObject({
+      id: expect.any(String),
+      name: expect.any(String),
+      email: expect.any(String),
+    })
+  })
+
+  test('check delete', async () => {
+    const res = await axios.delete(resCreate.headers.location)
+
+    expect(res.data).toHaveLength(0)
+  })
+})
+
 describe('input errors', () => {
   let createdUrl
 
