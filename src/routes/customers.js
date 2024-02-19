@@ -1,8 +1,21 @@
 const S = require('fluent-json-schema')
+const config = require('../config')
 
 const customers = new Map()
 
 module.exports = async (fastify, options) => {
+  fastify.register(require('@fastify/jwt'), {
+    secret: config.adminJwtSecret
+  })
+
+  fastify.addHook('onRequest', async (request, reply) => {
+    try {
+      await request.jwtVerify()
+    } catch (err) {
+      reply.send(err)
+    }
+  })
+
   const baseBodySchema = S.object()
     .prop('name', S.string().minLength(1).required())
     .prop('email', S.string().format(S.FORMATS.EMAIL).required())
