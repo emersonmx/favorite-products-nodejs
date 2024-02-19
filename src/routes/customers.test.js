@@ -1,7 +1,9 @@
 const axios = require('axios')
 const { expect } = require('@jest/globals')
 
-axios.defaults.baseURL = 'http://127.0.0.1:3000'
+const config = require('../config')
+
+axios.defaults.baseURL = `http://${config.baseUrl}`
 axios.defaults.validateStatus = () => {
   return true
 }
