@@ -89,12 +89,15 @@ module.exports = async (fastify, options) => {
     .prop('id', S.string().format(S.FORMATS.UUID))
     .prop('name', S.string())
     .prop('email', S.string().format(S.FORMATS.EMAIL))
+  const notFoundSchema = S.null().raw({ description: "Customer not found" })
+  const emailExistsSchema = S.null().raw({ description: 'Email already exists' })
 
   fastify.get('/:id', {
     schema: {
       params: paramsSchema,
       response: {
-        200: responseSchema
+        200: responseSchema,
+        404: notFoundSchema
       }
     }
   }, show)
@@ -103,7 +106,8 @@ module.exports = async (fastify, options) => {
     schema: {
       body: baseBodySchema,
       response: {
-        201: responseSchema
+        201: responseSchema,
+        409: emailExistsSchema
       }
     }
   }, create)
@@ -113,7 +117,9 @@ module.exports = async (fastify, options) => {
       params: paramsSchema,
       body: baseBodySchema,
       response: {
-        200: responseSchema
+        200: responseSchema,
+        404: notFoundSchema,
+        409: emailExistsSchema
       }
     }
   }, update)
@@ -122,7 +128,8 @@ module.exports = async (fastify, options) => {
     schema: {
       params: paramsSchema,
       response: {
-        200: responseSchema
+        200: S.null(),
+        404: notFoundSchema
       }
     }
   }, destroy)
