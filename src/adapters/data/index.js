@@ -1,5 +1,10 @@
-const { MemoryCustomersData } = require('./customers-data.js')
+const { MemoryCustomersData } = require('./customers-data')
+const { MemoryProductsData } = require('./product-list-data')
+const { AxiosProductsApiClient, MemoryCachedProductsApiClient } = require('./products-api-client')
 
 module.exports = {
-  MemoryCustomersData
+  MemoryCustomersData,
+  MemoryProductsData,
+  AxiosProductsApiClient,
+  MemoryCachedProductsApiClient
 }
