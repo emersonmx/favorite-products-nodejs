@@ -7,6 +7,7 @@ const baseUrl = `${host}:${port}`
 const adminJwtSecret = env.ADMIN_JWT_SECRET
 const adminEmails = env.ADMIN_EMAILS.split(',') || []
 const customerJwtSecret = env.CUSTOMER_JWT_SECRET
+const productsApiUrl = env.PRODUCTS_API_URL || 'http://challenge-api.luizalabs.com/api/product'
 
 module.exports = {
   version,
@@ -15,5 +16,6 @@ module.exports = {
   baseUrl,
   adminJwtSecret,
   adminEmails,
-  customerJwtSecret
+  customerJwtSecret,
+  productsApiUrl
 }
