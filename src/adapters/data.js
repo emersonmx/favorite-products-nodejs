@@ -1,4 +1,4 @@
-class MemoryCustomerRepository {
+class MemoryCustomersData {
   constructor() {
     this.database = new Map()
     this.emailIndex = new Set()
@@ -44,5 +44,5 @@ class MemoryCustomerRepository {
 }
 
 module.exports = {
-  MemoryCustomerRepository
+  MemoryCustomersData
 }

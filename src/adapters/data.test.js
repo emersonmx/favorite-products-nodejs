@@ -1,14 +1,8 @@
-const { MemoryCustomerRepository } = require("./repositories")
-const { expect } = require('@jest/globals')
+const { MemoryCustomersData } = require("./data")
 
-describe('MemoryCustomerRepository', () => {
-  let repo
-
-  beforeEach(() => {
-    repo = new MemoryCustomerRepository()
-  })
-
+describe('MemoryCustomersData', () => {
   test('create when email not exists', async () => {
+    const repo = new MemoryCustomersData()
     const customer = {
       id: crypto.randomUUID(),
       name: 'Jane',
@@ -23,6 +17,7 @@ describe('MemoryCustomerRepository', () => {
   test('create when email exists', async () => {
     expect.assertions(1)
 
+    const repo = new MemoryCustomersData()
     const customer = {
       id: crypto.randomUUID(),
       name: 'Jane',
@@ -38,6 +33,7 @@ describe('MemoryCustomerRepository', () => {
   })
 
   test('find by id', async () => {
+    const repo = new MemoryCustomersData()
     const customer = {
       id: crypto.randomUUID(),
       name: 'Jane',
@@ -53,6 +49,7 @@ describe('MemoryCustomerRepository', () => {
   test('update when email not exists', async () => {
     expect.assertions(1)
 
+    const repo = new MemoryCustomersData()
     const customer = { name: 'Jane Doe', email: 'janedoe@example.com' }
 
     try {
@@ -65,6 +62,7 @@ describe('MemoryCustomerRepository', () => {
   test('update when use an email from another customer', async () => {
     expect.assertions(1)
 
+    const repo = new MemoryCustomersData()
     await repo.create({
       id: crypto.randomUUID(),
       name: 'John',
@@ -87,6 +85,7 @@ describe('MemoryCustomerRepository', () => {
   })
 
   test('update when is the same email', async () => {
+    const repo = new MemoryCustomersData()
     const customer = {
       id: crypto.randomUUID(),
       name: 'Jane',
@@ -104,6 +103,8 @@ describe('MemoryCustomerRepository', () => {
   test('delete when customer not exists', async () => {
     expect.assertions(1)
 
+    const repo = new MemoryCustomersData()
+
     try {
       await repo.delete(crypto.randomUUID())
     } catch (error) {
@@ -112,6 +113,7 @@ describe('MemoryCustomerRepository', () => {
   })
 
   test('delete when customer exists', async () => {
+    const repo = new MemoryCustomersData()
     const customer = {
       id: crypto.randomUUID(),
       name: 'Jane',
