@@ -46,6 +46,20 @@ describe('MemoryCustomersData', () => {
     expect(res).toMatchObject(customer)
   })
 
+  test('find by email', async () => {
+    const repo = new MemoryCustomersData()
+    const customer = {
+      id: crypto.randomUUID(),
+      name: 'Jane',
+      email: 'jane@example.com'
+    }
+    await repo.create(customer)
+
+    const res = await repo.findByEmail(customer.email)
+
+    expect(res).toMatchObject(customer)
+  })
+
   test('update when email not exists', async () => {
     expect.assertions(1)
 

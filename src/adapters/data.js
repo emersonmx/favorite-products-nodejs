@@ -1,10 +1,18 @@
 class MemoryCustomersData {
   constructor() {
     this.database = new Map()
-    this.emailIndex = new Set()
+    this.emailIndex = new Map()
   }
 
   async findById(id) {
+    return this.database.get(id) || null
+  }
+
+  async findByEmail(email) {
+    const id = this.emailIndex.get(email)
+    if (id === undefined) {
+      return null
+    }
     return this.database.get(id) || null
   }
 
@@ -14,7 +22,7 @@ class MemoryCustomersData {
     }
 
     this.database.set(id, { id, name, email })
-    this.emailIndex.add(email)
+    this.emailIndex.set(email, id)
   }
 
   async update(id, { name, email }) {
@@ -29,7 +37,7 @@ class MemoryCustomersData {
     }
 
     this.database.set(id, { id, name, email })
-    this.emailIndex.add(email)
+    this.emailIndex.set(email, id)
   }
 
   async delete(id) {
