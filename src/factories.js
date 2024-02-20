@@ -12,6 +12,5 @@ module.exports = fp(async function(fastify, opts) {
     deleteCustomer: new DeleteCustomer(customersData)
   }
 
-  fastify.decorate('customersData', customersData)
   fastify.decorate('usecases', usecases)
 })

@@ -3,13 +3,13 @@ const { Errors } = require('../usecases')
 async function create(request, reply) {
   const { name, email } = request.body
 
-  const customer = await this.customersData.findByEmail(email)
+  const customer = await this.usecases.findCustomerByEmail.execute(email)
   if (customer !== null) {
     return reply.code(409).send()
   }
 
   const id = crypto.randomUUID()
-  this.customersData.create({ id, name, email })
+  await this.usecases.createCustomer.execute({ id, name, email })
 
   reply
     .code(201)
@@ -19,7 +19,7 @@ async function create(request, reply) {
 
 async function show(request, reply) {
   const { id } = request.params
-  const customer = await this.customersData.findById(id)
+  const customer = await this.usecases.findCustomerById.execute(id)
   if (customer === null) {
     return reply.code(404).send()
   }
@@ -29,14 +29,14 @@ async function show(request, reply) {
 
 async function update(request, reply) {
   const { id } = request.params
-  const customer = await this.customersData.findById(id)
+  const customer = await this.usecases.findCustomerById.execute(id)
   if (customer === null) {
     return reply.code(404).send()
   }
 
   const { name, email } = request.body
   try {
-    await this.customersData.update(id, { name, email })
+    await this.usecases.updateCustomer.execute(id, { name, email })
   } catch (error) {
     if (error.message === Errors.INTEGRITY_ERROR) {
       return reply.code(409).send()
@@ -50,12 +50,12 @@ async function update(request, reply) {
 
 async function destroy(request, reply) {
   const { id } = request.params
-  const customer = await this.customersData.findById(id)
+  const customer = await this.usecases.findCustomerById.execute(id)
   if (customer === null) {
     return reply.code(404).send()
   }
 
-  await this.customersData.delete(id)
+  await this.usecases.deleteCustomer.execute(id)
 
   reply.send()
 }
