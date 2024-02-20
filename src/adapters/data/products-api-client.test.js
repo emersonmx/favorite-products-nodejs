@@ -39,7 +39,7 @@ test('find a product by id without reviewScore', async () => {
   expect(product.reviewScore).toBeUndefined()
 })
 
-test.only('find a product by id and cache it', async () => {
+test('find a product by id and cache it', async () => {
   const id = '79b1c283-00ef-6b22-1c8d-b0721999e2f0'
   const mockClient = {
     get: jest.fn(async () => {
