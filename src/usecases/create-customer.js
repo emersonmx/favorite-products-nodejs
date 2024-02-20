@@ -1,4 +1,4 @@
-const { Errors } = require(".")
+const { Errors } = require("./errors")
 
 class CreateCustomer {
   constructor(customersData) {
