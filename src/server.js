@@ -8,15 +8,26 @@ fastify.register(require('@fastify/cors'))
 fastify.register(require('@fastify/helmet'))
 fastify.register(require('@fastify/compress'))
 fastify.register(require('@fastify/swagger'), {
-  swagger: {
+  openapi: {
     info: {
       title: 'Favorite Products',
       description: 'An API to favorite customer products.',
       version: config.version
     },
-    host: config.baseUrl,
-    consumes: ['application/json'],
-    produces: ['application/json'],
+    components: {
+      securitySchemes: {
+        adminAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT'
+        },
+        customerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT'
+        }
+      }
+    }
   }
 })
 fastify.register(require('@fastify/swagger-ui'), {

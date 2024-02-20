@@ -39,6 +39,10 @@ module.exports = async (fastify, options) => {
     }
   })
 
+  const baseSchema = {
+    tags: ['product-list'],
+    security: [{ customerAuth: [] }],
+  }
   const baseBodySchema = S.object()
     .prop('id', S.string().format(S.FORMATS.UUID).required())
   const paramsSchema = S.object()
@@ -55,7 +59,7 @@ module.exports = async (fastify, options) => {
 
   fastify.get('/', {
     schema: {
-      tags: ['product-list'],
+      ...baseSchema,
       response: {
         200: responseSchema,
       }
@@ -64,7 +68,7 @@ module.exports = async (fastify, options) => {
 
   fastify.post('/', {
     schema: {
-      tags: ['product-list'],
+      ...baseSchema,
       body: baseBodySchema,
       response: {
         201: responseSchema,
@@ -75,7 +79,7 @@ module.exports = async (fastify, options) => {
 
   fastify.get('/:id', {
     schema: {
-      tags: ['product-list'],
+      ...baseSchema,
       params: paramsSchema,
       response: {
         200: responseSchema,
@@ -86,7 +90,7 @@ module.exports = async (fastify, options) => {
 
   fastify.delete('/:id', {
     schema: {
-      tags: ['product-list'],
+      ...baseSchema,
       params: paramsSchema,
       response: {
         200: S.null(),

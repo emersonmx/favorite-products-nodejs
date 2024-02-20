@@ -80,6 +80,10 @@ module.exports = async (fastify, options) => {
     }
   })
 
+  const baseSchema = {
+    tags: ['customers'],
+    security: [{ adminAuth: [] }],
+  }
   const baseBodySchema = S.object()
     .prop('name', S.string().minLength(1).required())
     .prop('email', S.string().format(S.FORMATS.EMAIL).required())
@@ -94,7 +98,7 @@ module.exports = async (fastify, options) => {
 
   fastify.get('/:id', {
     schema: {
-      tags: ['customers'],
+      ...baseSchema,
       params: paramsSchema,
       response: {
         200: responseSchema,
@@ -105,7 +109,7 @@ module.exports = async (fastify, options) => {
 
   fastify.post('/', {
     schema: {
-      tags: ['customers'],
+      ...baseSchema,
       body: baseBodySchema,
       response: {
         201: responseSchema,
@@ -116,7 +120,7 @@ module.exports = async (fastify, options) => {
 
   fastify.put('/:id', {
     schema: {
-      tags: ['customers'],
+      ...baseSchema,
       params: paramsSchema,
       body: baseBodySchema,
       response: {
@@ -129,7 +133,7 @@ module.exports = async (fastify, options) => {
 
   fastify.delete('/:id', {
     schema: {
-      tags: ['customers'],
+      ...baseSchema,
       params: paramsSchema,
       response: {
         200: S.null(),
