@@ -1,4 +1,4 @@
-class MemoryProductsData {
+class MemoryProductListData {
   constructor() {
     this.database = new Map()
   }
@@ -28,5 +28,5 @@ class MemoryProductsData {
   }
 }
 module.exports = {
-  MemoryProductsData
+  MemoryProductListData
 }
