@@ -86,6 +86,12 @@ module.exports = async (fastify, options) => {
     }
 
     const { name, email } = request.body
+    const hasEmail = emailIndex.has(email)
+    const isSameEmail = customers.get(id).email === email
+    if (hasEmail && !isSameEmail) {
+      return reply.code(409).send()
+    }
+
     customers.set(id, { id, name, email })
     emailIndex.add(email)
 

@@ -228,6 +228,40 @@ describe('rules errors', () => {
     expect(resJohn.status).toBe(201)
     expect(resJohnDoe.status).toBe(409)
   })
+
+  test.only('update to an email that already exists', async () => {
+    const resJohn = await axios.post('/customers', makeJohn())
+    const resJohnDoe = await axios.post('/customers', {
+      name: 'John Doe',
+      email: `johndoe.${crypto.randomUUID()}@example.com`
+    })
+
+    const res = await axios.put(resJohnDoe.headers.location, {
+      name: 'John Doe',
+      email: resJohn.data.email
+    })
+
+    expect(resJohn.status).toBe(201)
+    expect(resJohnDoe.status).toBe(201)
+    expect(res.status).toBe(409)
+  })
+
+  test.only('update when email is the same', async () => {
+    const resJohn = await axios.post('/customers', makeJohn())
+    const resJohnDoe = await axios.post('/customers', {
+      name: 'John Doe',
+      email: `johndoe.${crypto.randomUUID()}@example.com`
+    })
+
+    const res = await axios.put(resJohnDoe.headers.location, {
+      name: 'John Doe Jr',
+      email: resJohnDoe.data.email
+    })
+
+    expect(resJohn.status).toBe(201)
+    expect(resJohnDoe.status).toBe(201)
+    expect(res.status).toBe(200)
+  })
 })
 
 describe('invalid JWT', () => {
