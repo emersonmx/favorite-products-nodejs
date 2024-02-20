@@ -13,41 +13,45 @@ axios.defaults.validateStatus = () => {
   return true
 }
 
-const defaultCustomer = {
-  name: 'John',
-  email: 'john@example.com'
+function makeJohn() {
+  const id = crypto.randomUUID()
+  return {
+    name: `John ${id}`,
+    email: `john.${id}@example.com`
+  }
 }
 
 describe('happy path', () => {
   test('create with name and email', async () => {
-    const res = await axios.post('/customers', defaultCustomer)
+    const res = await axios.post('/customers', makeJohn())
 
     expect(res.status).toBe(201)
     expect(res.headers.location).toMatch(/\/customers\/(.+)$/)
   })
 
   test('show by id', async () => {
-    const resCreate = await axios.post('/customers', defaultCustomer)
+    const customer = makeJohn()
+    const resCreate = await axios.post('/customers', customer)
 
     const res = await axios.get(resCreate.headers.location)
 
     expect(res.status).toBe(200)
-    expect(res.data).toMatchObject(defaultCustomer)
+    expect(res.data).toMatchObject(customer)
   })
 
   test('update name and email', async () => {
-    const resCreate = await axios.post('/customers', defaultCustomer)
+    const resCreate = await axios.post('/customers', makeJohn())
 
     const res = await axios.put(resCreate.headers.location, {
       name: 'John Doe',
-      email: 'johndoe@example.com'
+      email: `johndoe.${crypto.randomUUID()}@example.com`
     })
 
     expect(res.status).toBe(200)
   })
 
   test('delete by id', async () => {
-    const resCreate = await axios.post('/customers', defaultCustomer)
+    const resCreate = await axios.post('/customers', makeJohn())
 
     const res = await axios.delete(resCreate.headers.location)
 
@@ -57,7 +61,7 @@ describe('happy path', () => {
 
 describe('response format', () => {
   test('check create', async () => {
-    const res = await axios.post('/customers', defaultCustomer)
+    const res = await axios.post('/customers', makeJohn())
 
     expect(res.data).toMatchObject({
       id: expect.any(String),
@@ -67,7 +71,7 @@ describe('response format', () => {
   })
 
   test('check show', async () => {
-    const resCreate = await axios.post('/customers', defaultCustomer)
+    const resCreate = await axios.post('/customers', makeJohn())
 
     const res = await axios.get(resCreate.headers.location)
 
@@ -79,11 +83,11 @@ describe('response format', () => {
 
   })
   test('check update', async () => {
-    const resCreate = await axios.post('/customers', defaultCustomer)
+    const resCreate = await axios.post('/customers', makeJohn())
 
     const res = await axios.put(resCreate.headers.location, {
       name: 'John Doe',
-      email: 'johndoe@example.com'
+      email: `johndoe.${crypto.randomUUID()}@example.com`
     })
 
     expect(res.data).toMatchObject({
@@ -94,7 +98,7 @@ describe('response format', () => {
   })
 
   test('check delete', async () => {
-    const resCreate = await axios.post('/customers', defaultCustomer)
+    const resCreate = await axios.post('/customers', makeJohn())
 
     const res = await axios.delete(resCreate.headers.location)
 
@@ -147,43 +151,46 @@ describe('input errors', () => {
 
   describe('update', () => {
     test('return 400 when undefined name', async () => {
-      const resCreate = await axios.post('/customers', defaultCustomer)
+      const customer = makeJohn()
+      const resCreate = await axios.post('/customers', customer)
 
-      const res = await axios.put(resCreate.headers.location, { email: 'john@example.com' })
+      const res = await axios.put(resCreate.headers.location, { email: customer.email })
 
       expect(res.status).toBe(400)
     })
     test('return 400 when null name', async () => {
-      const resCreate = await axios.post('/customers', defaultCustomer)
+      const customer = makeJohn()
+      const resCreate = await axios.post('/customers', customer)
 
-      const res = await axios.put(resCreate.headers.location, { name: null, email: 'john@example.com' })
+      const res = await axios.put(resCreate.headers.location, { name: null, email: customer.email })
 
       expect(res.status).toBe(400)
     })
     test('return 400 empty name', async () => {
-      const resCreate = await axios.post('/customers', defaultCustomer)
+      const customer = makeJohn()
+      const resCreate = await axios.post('/customers', customer)
 
-      const res = await axios.put(resCreate.headers.location, { name: '', email: 'john@example.com' })
+      const res = await axios.put(resCreate.headers.location, { name: '', email: customer.email })
 
       expect(res.status).toBe(400)
     })
 
     test('return 400 when undefined email', async () => {
-      const resCreate = await axios.post('/customers', defaultCustomer)
+      const resCreate = await axios.post('/customers', makeJohn())
 
       const res = await axios.put(resCreate.headers.location, { name: 'John' })
 
       expect(res.status).toBe(400)
     })
     test('return 400 when null email', async () => {
-      const resCreate = await axios.post('/customers', defaultCustomer)
+      const resCreate = await axios.post('/customers', makeJohn())
 
       const res = await axios.put(resCreate.headers.location, { name: 'John', email: null })
 
       expect(res.status).toBe(400)
     })
     test('return 400 when empty email', async () => {
-      const resCreate = await axios.post('/customers', defaultCustomer)
+      const resCreate = await axios.post('/customers', makeJohn())
 
       const res = await axios.put(resCreate.headers.location, { name: 'John', email: '' })
 
@@ -192,7 +199,9 @@ describe('input errors', () => {
 
     test('return 404 when id not found', async () => {
       const invalidId = crypto.randomUUID()
-      const res = await axios.put(`/customers/${invalidId}`, { name: 'John', email: 'john@example.com' })
+
+      const res = await axios.put(`/customers/${invalidId}`, makeJohn())
+
       expect(res.status).toBe(404)
     })
   })
@@ -200,6 +209,8 @@ describe('input errors', () => {
   describe('delete', () => {
     test('return 404 when id not found', async () => {
       const invalidId = crypto.randomUUID()
+
+
       const res = await axios.delete(`/customers/${invalidId}`)
       expect(res.status).toBe(404)
     })
@@ -218,7 +229,7 @@ describe('invalid JWT', () => {
   })
 
   test('return 401 when create', async () => {
-    const res = await session.post('/customers', defaultCustomer)
+    const res = await session.post('/customers', makeJohn())
 
     expect(res.status).toBe(401)
   })
@@ -234,7 +245,10 @@ describe('invalid JWT', () => {
   test('return 401 when update', async () => {
     const id = crypto.randomUUID()
 
-    const res = await session.put(`/customers/${id}`, { name: 'John Doe', email: 'johndoe@example.com' })
+    const res = await session.put(`/customers/${id}`, {
+      name: 'John Doe',
+      email: `johndoe.${crypto.randomUUID()}@example.com`
+    })
 
     expect(res.status).toBe(401)
   })
