@@ -1,7 +1,7 @@
 const axios = require('axios')
 
 const config = require('../../config')
-const { AxiosProductsApiClient } = require('./products-api-client')
+const { AxiosProductsApiClient, MemoryCachedProductsApiClient } = require('./products-api-client')
 
 test('find a product by id', async () => {
   const client = new AxiosProductsApiClient(axios.create({
@@ -38,3 +38,31 @@ test('find a product by id without reviewScore', async () => {
   })
   expect(product.reviewScore).toBeUndefined()
 })
+
+test.only('find a product by id and cache it', async () => {
+  const id = '79b1c283-00ef-6b22-1c8d-b0721999e2f0'
+  const mockClient = {
+    get: jest.fn(async () => {
+      return {
+        status: 200,
+        data: {
+          brand: 'a-brand',
+          id,
+          image: `http://example.com/images/${id}.jpg`,
+          price: 1.99,
+          reviewScore: 3.14,
+          title: 'a-title'
+        }
+      }
+    })
+  }
+  const axiosClient = new AxiosProductsApiClient(mockClient)
+  const client = new MemoryCachedProductsApiClient(axiosClient)
+
+  await client.findById(id)
+  await client.findById(id)
+  await client.findById(id)
+
+  expect(mockClient.get.mock.calls).toHaveLength(1);
+})
+

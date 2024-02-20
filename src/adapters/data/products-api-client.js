@@ -12,6 +12,29 @@ class AxiosProductsApiClient {
   }
 }
 
+class MemoryCachedProductsApiClient {
+  constructor(productsApiClient) {
+    this.productsApiClient = productsApiClient
+    this.memory = new Map()
+  }
+
+  async findById(id) {
+    const inMemoryProduct = this.memory.get(id)
+    if (inMemoryProduct !== undefined) {
+      return inMemoryProduct
+    }
+
+    const product = await this.productsApiClient.findById(id)
+    if (product === null) {
+      return null
+    }
+
+    this.memory.set(id, product)
+    return product
+  }
+}
+
 module.exports = {
-  AxiosProductsApiClient
+  AxiosProductsApiClient,
+  MemoryCachedProductsApiClient
 }
