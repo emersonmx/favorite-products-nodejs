@@ -1,4 +1,4 @@
-class ShowCustomer {
+class FindCustomerById {
   constructor(customersData) {
     this.customersData = customersData
   }
@@ -8,4 +8,4 @@ class ShowCustomer {
   }
 }
 
-module.exports = ShowCustomer
+module.exports = FindCustomerById

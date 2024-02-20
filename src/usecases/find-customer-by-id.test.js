@@ -1,8 +1,8 @@
 const CreateCustomer = require('./create-customer')
-const ShowCustomer = require('./show-customer')
+const FindCustomerById = require('./find-customer-by-id')
 const { MemoryCustomersData } = require("../adapters/data")
 
-test('show customer', async () => {
+test('find customer', async () => {
   const customersData = new MemoryCustomersData()
   const customer = {
     id: crypto.randomUUID(),
@@ -10,7 +10,7 @@ test('show customer', async () => {
     email: 'john@example.com'
   }
   await (new CreateCustomer(customersData)).execute(customer)
-  const useCase = new ShowCustomer(customersData)
+  const useCase = new FindCustomerById(customersData)
 
   const res = await useCase.execute(customer.id)
 
@@ -19,7 +19,7 @@ test('show customer', async () => {
 
 test('return null when customer not exists', async () => {
   const customersData = new MemoryCustomersData()
-  const useCase = new ShowCustomer(customersData)
+  const useCase = new FindCustomerById(customersData)
 
   const res = await useCase.execute(crypto.randomUUID())
 
