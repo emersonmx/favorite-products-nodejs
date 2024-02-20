@@ -1,4 +1,4 @@
-const { Errors } = require("../usecases")
+const { Errors } = require("../../usecases")
 
 class MemoryCustomersData {
   constructor() {

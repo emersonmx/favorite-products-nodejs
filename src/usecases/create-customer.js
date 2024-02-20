@@ -1,13 +1,15 @@
+const { Errors } = require(".")
+
 class CreateCustomer {
-  constructor(repository) {
-    this.repository = repository
+  constructor(customersData) {
+    this.customersData = customersData
   }
 
   async execute({ id, name, email }) {
     try {
-      await this.repository.create({ id, name, email })
+      await this.customersData.create({ id, name, email })
     } catch (error) {
-      if (error.message === 'Email exists') {
+      if (error.message === Errors.INTEGRITY_ERROR) {
         throw new Error('E-mail already registered')
       }
 
