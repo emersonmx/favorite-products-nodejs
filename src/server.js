@@ -23,6 +23,7 @@ fastify.register(require('@fastify/swagger-ui'), {
   routePrefix: '/docs',
 })
 
+fastify.register(require('./factories'))
 fastify.register(require('./routes'))
 
 fastify.listen({ host: config.host, port: config.port }, (err, address) => {
