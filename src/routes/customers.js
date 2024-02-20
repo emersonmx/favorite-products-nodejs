@@ -94,6 +94,7 @@ module.exports = async (fastify, options) => {
 
   fastify.get('/:id', {
     schema: {
+      tags: ['customers'],
       params: paramsSchema,
       response: {
         200: responseSchema,
@@ -104,6 +105,7 @@ module.exports = async (fastify, options) => {
 
   fastify.post('/', {
     schema: {
+      tags: ['customers'],
       body: baseBodySchema,
       response: {
         201: responseSchema,
@@ -114,6 +116,7 @@ module.exports = async (fastify, options) => {
 
   fastify.put('/:id', {
     schema: {
+      tags: ['customers'],
       params: paramsSchema,
       body: baseBodySchema,
       response: {
@@ -126,6 +129,7 @@ module.exports = async (fastify, options) => {
 
   fastify.delete('/:id', {
     schema: {
+      tags: ['customers'],
       params: paramsSchema,
       response: {
         200: S.null(),
