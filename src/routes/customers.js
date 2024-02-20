@@ -55,9 +55,13 @@ module.exports = async (fastify, options) => {
       }
     }
   }, async (request, reply) => {
-    const id = crypto.randomUUID()
     const { name, email } = request.body
 
+    if (emailIndex.has(email)) {
+      return reply.code(409).send()
+    }
+
+    const id = crypto.randomUUID()
     customers.set(id, { id, name, email })
     emailIndex.add(email)
 

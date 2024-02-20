@@ -217,6 +217,19 @@ describe('input errors', () => {
   })
 })
 
+describe('rules errors', () => {
+  test('check creation of duplicate email.', async () => {
+    const resJohn = await axios.post('/customers', makeJohn())
+    const resJohnDoe = await axios.post('/customers', {
+      name: 'John Doe',
+      email: resJohn.data.email
+    })
+
+    expect(resJohn.status).toBe(201)
+    expect(resJohnDoe.status).toBe(409)
+  })
+})
+
 describe('invalid JWT', () => {
   let session
 
