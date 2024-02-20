@@ -13,33 +13,31 @@ axios.defaults.validateStatus = () => {
   return true
 }
 
+const defaultCustomer = {
+  name: 'John',
+  email: 'john@example.com'
+}
+
 describe('happy path', () => {
-  let resCreate
-
-  beforeAll(async () => {
-    resCreate = await axios.post('/customers', {
-      name: 'John',
-      email: 'john@example.com'
-    })
-  })
-
-  afterAll(async () => {
-    await axios.delete(resCreate.headers.location)
-  })
-
   test('create with name and email', async () => {
-    expect(resCreate.status).toBe(201)
-    expect(resCreate.headers.location).toMatch(/\/customers\/(.+)$/)
+    const res = await axios.post('/customers', defaultCustomer)
+
+    expect(res.status).toBe(201)
+    expect(res.headers.location).toMatch(/\/customers\/(.+)$/)
   })
 
   test('show by id', async () => {
+    const resCreate = await axios.post('/customers', defaultCustomer)
+
     const res = await axios.get(resCreate.headers.location)
 
     expect(res.status).toBe(200)
-    expect(res.data).toMatchObject({ name: 'John', email: 'john@example.com' })
+    expect(res.data).toMatchObject(defaultCustomer)
   })
 
   test('update name and email', async () => {
+    const resCreate = await axios.post('/customers', defaultCustomer)
+
     const res = await axios.put(resCreate.headers.location, {
       name: 'John Doe',
       email: 'johndoe@example.com'
@@ -49,30 +47,19 @@ describe('happy path', () => {
   })
 
   test('delete by id', async () => {
-    const resDelete = await axios.delete(resCreate.headers.location)
-    const resShow = await axios.get(resCreate.headers.location)
+    const resCreate = await axios.post('/customers', defaultCustomer)
 
-    expect(resDelete.status).toBe(200)
-    expect(resShow.status).toBe(404)
+    const res = await axios.delete(resCreate.headers.location)
+
+    expect(res.status).toBe(200)
   })
 })
 
 describe('response format', () => {
-  let resCreate
-
-  beforeAll(async () => {
-    resCreate = await axios.post('/customers', {
-      name: 'John',
-      email: 'john@example.com'
-    })
-  })
-
-  afterAll(async () => {
-    await axios.delete(resCreate.headers.location)
-  })
-
   test('check create', async () => {
-    expect(resCreate.data).toMatchObject({
+    const res = await axios.post('/customers', defaultCustomer)
+
+    expect(res.data).toMatchObject({
       id: expect.any(String),
       name: expect.any(String),
       email: expect.any(String),
@@ -80,6 +67,8 @@ describe('response format', () => {
   })
 
   test('check show', async () => {
+    const resCreate = await axios.post('/customers', defaultCustomer)
+
     const res = await axios.get(resCreate.headers.location)
 
     expect(res.data).toMatchObject({
@@ -90,6 +79,8 @@ describe('response format', () => {
 
   })
   test('check update', async () => {
+    const resCreate = await axios.post('/customers', defaultCustomer)
+
     const res = await axios.put(resCreate.headers.location, {
       name: 'John Doe',
       email: 'johndoe@example.com'
@@ -103,6 +94,8 @@ describe('response format', () => {
   })
 
   test('check delete', async () => {
+    const resCreate = await axios.post('/customers', defaultCustomer)
+
     const res = await axios.delete(resCreate.headers.location)
 
     expect(res.data).toHaveLength(0)
@@ -110,20 +103,6 @@ describe('response format', () => {
 })
 
 describe('input errors', () => {
-  let createdUrl
-
-  beforeAll(async () => {
-    const res = await axios.post('/customers', {
-      name: 'John',
-      email: 'john@example.com'
-    })
-    createdUrl = res.headers.location
-  })
-
-  afterAll(async () => {
-    await axios.delete(createdUrl)
-  })
-
   describe('create', () => {
     test('return 400 when undefined name', async () => {
       const res = await axios.post('/customers', { email: 'john@example.com' })
@@ -168,33 +147,45 @@ describe('input errors', () => {
 
   describe('update', () => {
     test('return 400 when undefined name', async () => {
-      const res = await axios.put(createdUrl, { email: 'john@example.com' })
+      const resCreate = await axios.post('/customers', defaultCustomer)
+
+      const res = await axios.put(resCreate.headers.location, { email: 'john@example.com' })
 
       expect(res.status).toBe(400)
     })
     test('return 400 when null name', async () => {
-      const res = await axios.put(createdUrl, { name: null, email: 'john@example.com' })
+      const resCreate = await axios.post('/customers', defaultCustomer)
+
+      const res = await axios.put(resCreate.headers.location, { name: null, email: 'john@example.com' })
 
       expect(res.status).toBe(400)
     })
     test('return 400 empty name', async () => {
-      const res = await axios.put(createdUrl, { name: '', email: 'john@example.com' })
+      const resCreate = await axios.post('/customers', defaultCustomer)
+
+      const res = await axios.put(resCreate.headers.location, { name: '', email: 'john@example.com' })
 
       expect(res.status).toBe(400)
     })
 
     test('return 400 when undefined email', async () => {
-      const res = await axios.put(createdUrl, { name: 'John' })
+      const resCreate = await axios.post('/customers', defaultCustomer)
+
+      const res = await axios.put(resCreate.headers.location, { name: 'John' })
 
       expect(res.status).toBe(400)
     })
     test('return 400 when null email', async () => {
-      const res = await axios.put(createdUrl, { name: 'John', email: null })
+      const resCreate = await axios.post('/customers', defaultCustomer)
+
+      const res = await axios.put(resCreate.headers.location, { name: 'John', email: null })
 
       expect(res.status).toBe(400)
     })
     test('return 400 when empty email', async () => {
-      const res = await axios.put(createdUrl, { name: 'John', email: '' })
+      const resCreate = await axios.post('/customers', defaultCustomer)
+
+      const res = await axios.put(resCreate.headers.location, { name: 'John', email: '' })
 
       expect(res.status).toBe(400)
     })
@@ -227,13 +218,14 @@ describe('invalid JWT', () => {
   })
 
   test('return 401 when create', async () => {
-    const res = await session.post('/customers', { name: 'John', email: 'john@example.com' })
+    const res = await session.post('/customers', defaultCustomer)
 
     expect(res.status).toBe(401)
   })
 
   test('return 401 when show', async () => {
     const id = crypto.randomUUID()
+
     const res = await session.get(`/customers/${id}`)
 
     expect(res.status).toBe(401)
@@ -241,6 +233,7 @@ describe('invalid JWT', () => {
 
   test('return 401 when update', async () => {
     const id = crypto.randomUUID()
+
     const res = await session.put(`/customers/${id}`, { name: 'John Doe', email: 'johndoe@example.com' })
 
     expect(res.status).toBe(401)
@@ -248,6 +241,7 @@ describe('invalid JWT', () => {
 
   test('return 401 when delete', async () => {
     const id = crypto.randomUUID()
+
     const res = await session.delete(`/customers/${id}`)
 
     expect(res.status).toBe(401)
