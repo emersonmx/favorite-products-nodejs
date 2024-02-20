@@ -2,6 +2,7 @@ const S = require('fluent-json-schema')
 const config = require('../config')
 
 const customers = new Map()
+const emailIndex = new Set()
 
 module.exports = async (fastify, options) => {
   fastify.register(require('@fastify/jwt'), {
@@ -58,6 +59,7 @@ module.exports = async (fastify, options) => {
     const { name, email } = request.body
 
     customers.set(id, { id, name, email })
+    emailIndex.add(email)
 
     reply
       .code(201)
@@ -81,6 +83,7 @@ module.exports = async (fastify, options) => {
 
     const { name, email } = request.body
     customers.set(id, { id, name, email })
+    emailIndex.add(email)
 
     return customers.get(id)
   })
@@ -98,7 +101,9 @@ module.exports = async (fastify, options) => {
       return reply.code(404).send()
     }
 
+    const { email } = customers.get(id)
     customers.delete(id)
+    emailIndex.delete(email)
 
     reply.send()
   })
