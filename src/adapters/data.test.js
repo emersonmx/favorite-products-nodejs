@@ -90,7 +90,7 @@ describe('MemoryCustomersData', () => {
     try {
       await repo.update(customer.id, updatedCustomer)
     } catch (error) {
-      expect(error.message).toMatch('Email exists')
+      expect(error.message).toMatch('Integrity error')
     }
   })
 

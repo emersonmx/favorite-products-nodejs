@@ -33,7 +33,7 @@ class MemoryCustomersData {
     const isSameEmail = this.database.get(id).email === email
     const hasEmail = this.emailIndex.has(email)
     if (hasEmail && !isSameEmail) {
-      throw new Error('Email exists')
+      throw new Error('Integrity error')
     }
 
     this.database.set(id, { id, name, email })
