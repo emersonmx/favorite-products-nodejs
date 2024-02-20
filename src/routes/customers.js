@@ -1,5 +1,3 @@
-const S = require('fluent-json-schema')
-const config = require('../config')
 const { Errors } = require('../adapters/data')
 
 async function create(request, reply) {
@@ -63,6 +61,9 @@ async function destroy(request, reply) {
 }
 
 module.exports = async (fastify, options) => {
+  const S = require('fluent-json-schema')
+  const config = require('../config')
+
   fastify.register(require('@fastify/jwt'), {
     secret: config.adminJwtSecret
   })
