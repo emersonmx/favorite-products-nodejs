@@ -229,7 +229,7 @@ describe('rules errors', () => {
     expect(resJohnDoe.status).toBe(409)
   })
 
-  test.only('update to an email that already exists', async () => {
+  test('update to an email that already exists', async () => {
     const resJohn = await axios.post('/customers', makeJohn())
     const resJohnDoe = await axios.post('/customers', {
       name: 'John Doe',
@@ -246,7 +246,7 @@ describe('rules errors', () => {
     expect(res.status).toBe(409)
   })
 
-  test.only('update when email is the same', async () => {
+  test('update when email is the same', async () => {
     const resJohn = await axios.post('/customers', makeJohn())
     const resJohnDoe = await axios.post('/customers', {
       name: 'John Doe',
