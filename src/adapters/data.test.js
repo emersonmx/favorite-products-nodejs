@@ -28,7 +28,7 @@ describe('MemoryCustomersData', () => {
     try {
       await repo.create(customer)
     } catch (error) {
-      expect(error.message).toMatch('Email exists');
+      expect(error.message).toMatch('Integrity error');
     }
   })
 
@@ -61,16 +61,12 @@ describe('MemoryCustomersData', () => {
   })
 
   test('update when email not exists', async () => {
-    expect.assertions(1)
-
     const repo = new MemoryCustomersData()
     const customer = { name: 'Jane Doe', email: 'janedoe@example.com' }
 
-    try {
-      await repo.update(crypto.randomUUID(), customer)
-    } catch (error) {
-      expect(error.message).toMatch('Customer not exists')
-    }
+    await repo.update(crypto.randomUUID(), customer)
+
+    expect(repo.database.size).toBe(0)
   })
 
   test('update when use an email from another customer', async () => {
@@ -115,15 +111,12 @@ describe('MemoryCustomersData', () => {
   })
 
   test('delete when customer not exists', async () => {
-    expect.assertions(1)
-
     const repo = new MemoryCustomersData()
+    const beforeSize = repo.database.size
 
-    try {
-      await repo.delete(crypto.randomUUID())
-    } catch (error) {
-      expect(error.message).toMatch('Customer not exists')
-    }
+    await repo.delete(crypto.randomUUID())
+
+    expect(repo.database.size).toBe(beforeSize)
   })
 
   test('delete when customer exists', async () => {

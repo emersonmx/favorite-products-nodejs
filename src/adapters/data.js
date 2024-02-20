@@ -18,7 +18,7 @@ class MemoryCustomersData {
 
   async create({ id, name, email }) {
     if (this.emailIndex.has(email)) {
-      throw new Error('Email exists')
+      throw new Error('Integrity error')
     }
 
     this.database.set(id, { id, name, email })
@@ -27,7 +27,7 @@ class MemoryCustomersData {
 
   async update(id, { name, email }) {
     if (!this.database.has(id)) {
-      throw new Error('Customer not exists')
+      return
     }
 
     const isSameEmail = this.database.get(id).email === email
@@ -42,7 +42,7 @@ class MemoryCustomersData {
 
   async delete(id) {
     if (!this.database.has(id)) {
-      throw new Error('Customer not exists')
+      return
     }
 
     const customer = this.database.get(id)
