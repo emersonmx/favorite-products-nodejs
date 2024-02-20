@@ -1,4 +1,4 @@
-const { MemoryCustomersData } = require("./data")
+const { MemoryCustomersData, Errors } = require("./data")
 
 describe('MemoryCustomersData', () => {
   test('create when email not exists', async () => {
@@ -28,7 +28,7 @@ describe('MemoryCustomersData', () => {
     try {
       await repo.create(customer)
     } catch (error) {
-      expect(error.message).toMatch('Integrity error');
+      expect(error.message).toMatch(Errors.INTEGRITY_ERROR);
     }
   })
 
@@ -90,7 +90,7 @@ describe('MemoryCustomersData', () => {
     try {
       await repo.update(customer.id, updatedCustomer)
     } catch (error) {
-      expect(error.message).toMatch('Integrity error')
+      expect(error.message).toMatch(Errors.INTEGRITY_ERROR)
     }
   })
 

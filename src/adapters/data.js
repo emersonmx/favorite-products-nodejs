@@ -1,3 +1,7 @@
+const Errors = {
+  INTEGRITY_ERROR: 'Integrity error'
+}
+
 class MemoryCustomersData {
   constructor() {
     this.database = new Map()
@@ -18,7 +22,7 @@ class MemoryCustomersData {
 
   async create({ id, name, email }) {
     if (this.emailIndex.has(email)) {
-      throw new Error('Integrity error')
+      throw new Error(Errors.INTEGRITY_ERROR)
     }
 
     this.database.set(id, { id, name, email })
@@ -33,7 +37,7 @@ class MemoryCustomersData {
     const isSameEmail = this.database.get(id).email === email
     const hasEmail = this.emailIndex.has(email)
     if (hasEmail && !isSameEmail) {
-      throw new Error('Integrity error')
+      throw new Error(Errors.INTEGRITY_ERROR)
     }
 
     this.database.set(id, { id, name, email })
@@ -52,5 +56,6 @@ class MemoryCustomersData {
 }
 
 module.exports = {
+  Errors,
   MemoryCustomersData
 }
