@@ -2,6 +2,66 @@ const S = require('fluent-json-schema')
 const config = require('../config')
 const { Errors } = require('../adapters/data')
 
+async function create(request, reply) {
+  const { name, email } = request.body
+
+  const customer = await this.customersData.findByEmail(email)
+  if (customer !== null) {
+    return reply.code(409).send()
+  }
+
+  const id = crypto.randomUUID()
+  this.customersData.create({ id, name, email })
+
+  reply
+    .code(201)
+    .header('location', encodeURI(`/customers/${id}`))
+    .send({ id, name, email })
+}
+
+async function show(request, reply) {
+  const { id } = request.params
+  const customer = await this.customersData.findById(id)
+  if (customer === null) {
+    return reply.code(404).send()
+  }
+
+  return customer
+}
+
+async function update(request, reply) {
+  const { id } = request.params
+  const customer = await this.customersData.findById(id)
+  if (customer === null) {
+    return reply.code(404).send()
+  }
+
+  const { name, email } = request.body
+  try {
+    await this.customersData.update(id, { name, email })
+  } catch (error) {
+    if (error.message === Errors.INTEGRITY_ERROR) {
+      return reply.code(409).send()
+    } else {
+      throw error
+    }
+  }
+
+  return { id, name, email }
+}
+
+async function destroy(request, reply) {
+  const { id } = request.params
+  const customer = await this.customersData.findById(id)
+  if (customer === null) {
+    return reply.code(404).send()
+  }
+
+  await this.customersData.delete(id)
+
+  reply.send()
+}
+
 module.exports = async (fastify, options) => {
   fastify.register(require('@fastify/jwt'), {
     secret: config.adminJwtSecret
@@ -36,15 +96,7 @@ module.exports = async (fastify, options) => {
         200: responseSchema
       }
     }
-  }, async (request, reply) => {
-    const { id } = request.params
-    const customer = await fastify.customersData.findById(id)
-    if (customer === null) {
-      return reply.code(404).send()
-    }
-
-    return customer
-  })
+  }, show)
 
   fastify.post('/', {
     schema: {
@@ -53,22 +105,7 @@ module.exports = async (fastify, options) => {
         201: responseSchema
       }
     }
-  }, async (request, reply) => {
-    const { name, email } = request.body
-
-    const customer = await fastify.customersData.findByEmail(email)
-    if (customer !== null) {
-      return reply.code(409).send()
-    }
-
-    const id = crypto.randomUUID()
-    fastify.customersData.create({ id, name, email })
-
-    reply
-      .code(201)
-      .header('location', encodeURI(`/customers/${id}`))
-      .send({ id, name, email })
-  })
+  }, create)
 
   fastify.put('/:id', {
     schema: {
@@ -78,26 +115,7 @@ module.exports = async (fastify, options) => {
         200: responseSchema
       }
     }
-  }, async (request, reply) => {
-    const { id } = request.params
-    const customer = await fastify.customersData.findById(id)
-    if (customer === null) {
-      return reply.code(404).send()
-    }
-
-    const { name, email } = request.body
-    try {
-      await fastify.customersData.update(id, { name, email })
-    } catch (error) {
-      if (error.message === Errors.INTEGRITY_ERROR) {
-        return reply.code(409).send()
-      } else {
-        throw error
-      }
-    }
-
-    return { id, name, email }
-  })
+  }, update)
 
   fastify.delete('/:id', {
     schema: {
@@ -106,16 +124,5 @@ module.exports = async (fastify, options) => {
         200: responseSchema
       }
     }
-  }, async (request, reply) => {
-    const { id } = request.params
-
-    const customer = await fastify.customersData.findById(id)
-    if (customer === null) {
-      return reply.code(404).send()
-    }
-
-    await fastify.customersData.delete(id)
-
-    reply.send()
-  })
+  }, destroy)
 }
