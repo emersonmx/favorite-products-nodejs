@@ -1,4 +1,4 @@
-const { Errors } = require('../adapters/data')
+const { Errors } = require('../usecases')
 
 async function create(request, reply) {
   const { name, email } = request.body

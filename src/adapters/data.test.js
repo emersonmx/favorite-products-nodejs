@@ -1,4 +1,5 @@
-const { MemoryCustomersData, Errors } = require("./data")
+const { MemoryCustomersData } = require("./data")
+const { Errors } = require("../usecases")
 
 describe('MemoryCustomersData', () => {
   test('create when email not exists', async () => {

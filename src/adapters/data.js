@@ -1,6 +1,4 @@
-const Errors = {
-  INTEGRITY_ERROR: 'Integrity error'
-}
+const { Errors } = require("../usecases")
 
 class MemoryCustomersData {
   constructor() {
@@ -56,6 +54,5 @@ class MemoryCustomersData {
 }
 
 module.exports = {
-  Errors,
   MemoryCustomersData
 }
