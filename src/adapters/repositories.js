@@ -1,11 +1,11 @@
 class MemoryCustomerRepository {
-  constructor(database) {
-    this.database = database
-    this.emailIndex = new Set([...database.values()].map(c => c.email))
+  constructor() {
+    this.database = new Map()
+    this.emailIndex = new Set()
   }
 
   async findById(id) {
-    return this.database.get(id)
+    return this.database.get(id) || null
   }
 
   async create({ id, name, email }) {

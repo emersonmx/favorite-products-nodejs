@@ -5,7 +5,7 @@ describe('MemoryCustomerRepository', () => {
   let repo
 
   beforeEach(() => {
-    repo = new MemoryCustomerRepository(new Map())
+    repo = new MemoryCustomerRepository()
   })
 
   test('create when email not exists', async () => {
