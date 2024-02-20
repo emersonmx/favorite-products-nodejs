@@ -26,11 +26,9 @@ fastify.register(require('@fastify/swagger-ui'), {
 fastify.register(require('./factories'))
 fastify.register(require('./routes'))
 
-fastify.listen({ host: config.host, port: config.port }, (err, address) => {
+fastify.listen({ host: config.host, port: config.port }, (err, _) => {
   if (err) {
     fastify.log.error(err)
     process.exit(1)
-  } else {
-    fastify.log.info(`Listening on ${address}`)
   }
 })
