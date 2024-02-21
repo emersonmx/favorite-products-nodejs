@@ -50,18 +50,20 @@ npm run dev
 - Evitar configurações complicadas para as ferramentas de desenvolvimento
   (eslint, jest, babel, etc)
 - Assumir que a API terá dois papeis: cliente e admin
-  - O admin pode gerenciar os clientes (`/customers`)
-  - O cliente pode gerenciar os produtos favoritos (`/product-list`)
-- Assumir que o cliente e o admin vão passar o email no JWT
+  - O admin gerencia os clientes (`/customers`)
+  - O cliente gerencia os produtos favoritos (`/product-list`)
+- Assumir que o cliente e o admin vão passar os dados necessários no JWT
+  - Admin passa o email
+  - Customer para o UUID
 - Abstrair chamadas para APIs externas
-  - Exemplo: API de produto e o serviço de autenticação
+  - Exemplo: API de produto
 - Abstrair camada do banco
 - Usar o Fastify, pois é mais produtivo (swagger, validação, etc) e performático
   que o Express
 - Inicialmente seguir com uma arquitetura simples
   - Infra (framework web e setup da aplicação)
   - Casos de uso (Operações, portas e algumas regras de negócio)
-  - Adaptadores (implementa os "contratos" dos caso de uso)
+  - Adaptadores (implementação dos contratos dos caso de uso)
 
 ## Dívidas
 
