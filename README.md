@@ -41,6 +41,10 @@ npm run dev
 # Faça suas modificações!
 ```
 
+## Arquitetura
+
+...
+
 ## Decisões
 
 - Evitar configurações complicadas para as ferramentas de desenvolvimento
@@ -58,5 +62,9 @@ npm run dev
   - Infra (framework web e setup da aplicação)
   - Casos de uso (Operações, portas e algumas regras de negócio)
   - Adaptadores (implementa os "contratos" dos caso de uso)
+
+## Dívidas
+
+...
 
 [products-api]: https://gist.github.com/Bgouveia/9e043a3eba439489a35e70d1b5ea08ec
