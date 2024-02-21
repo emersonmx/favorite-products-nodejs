@@ -40,7 +40,7 @@ class MemoryCustomerProductListData {
     return page - 1
   }
 
-  hasProduct(customerId, productId) {
+  async hasProduct(customerId, productId) {
     const products = this.database.get(customerId) || new Set()
     return products.has(productId)
   }
@@ -54,7 +54,7 @@ class MemoryCustomerProductListData {
   }
 
   async delete(customerId, productId) {
-    if (!this.hasProduct(customerId, productId)) {
+    if (!await this.hasProduct(customerId, productId)) {
       return
     }
 

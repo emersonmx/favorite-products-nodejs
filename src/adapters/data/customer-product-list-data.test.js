@@ -48,6 +48,27 @@ test('delete a product when it does not exist', async () => {
   expect(productListData.database.get(customerId)).toBe(productsBefore)
 })
 
+test('has a product', async () => {
+  const productListData = new MemoryCustomerProductListData()
+  const customerId = crypto.randomUUID()
+  const productId = crypto.randomUUID()
+  await productListData.add(customerId, productId)
+
+  const res  = await productListData.hasProduct(customerId, productId)
+
+  expect(res).toBeTruthy()
+})
+
+test('has not a product', async () => {
+  const productListData = new MemoryCustomerProductListData()
+  const customerId = crypto.randomUUID()
+  const productId = crypto.randomUUID()
+
+  const res  = await productListData.hasProduct(customerId, productId)
+
+  expect(res).toBeFalsy()
+})
+
 test('list empty products', async () => {
   const productListData = new MemoryCustomerProductListData()
   const customerId = crypto.randomUUID()
