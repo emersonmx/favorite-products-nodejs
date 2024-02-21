@@ -1,6 +1,12 @@
 const fp = require('fastify-plugin')
 const { MemoryCustomersData } = require('./adapters/data')
-const { CreateCustomer, FindCustomerById, FindCustomerByEmail, UpdateCustomer, DeleteCustomer } = require('./usecases')
+const {
+  CreateCustomer,
+  FindCustomerById,
+  FindCustomerByEmail,
+  UpdateCustomer,
+  DeleteCustomer
+} = require('./usecases')
 
 module.exports = fp(async function(fastify, opts) {
   const customersData = new MemoryCustomersData()
