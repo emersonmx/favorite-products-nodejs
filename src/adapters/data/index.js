@@ -1,7 +1,7 @@
 const { MemoryCustomersData } = require('./customers-data')
-const { MemoryProductListData } = require('./product-list-data')
+const { MemoryCustomerProductListData  } = require('./customer-product-list-data')
 
 module.exports = {
   MemoryCustomersData,
-  MemoryProductListData
+  MemoryCustomerProductListData
 }
