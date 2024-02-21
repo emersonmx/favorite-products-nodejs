@@ -8,6 +8,8 @@ const adminJwtSecret = env.ADMIN_JWT_SECRET
 const adminEmails = env.ADMIN_EMAILS.split(',') || []
 const customerJwtSecret = env.CUSTOMER_JWT_SECRET
 const productsApiUrl = env.PRODUCTS_API_URL || 'http://challenge-api.luizalabs.com/api/product'
+const paginationMinLimit = env.PAGINATION_MIN_LIMIT || 1
+const paginationMaxLimit = env.PAGINATION_MAX_LIMIT || 100
 
 module.exports = {
   version,
@@ -17,5 +19,7 @@ module.exports = {
   adminJwtSecret,
   adminEmails,
   customerJwtSecret,
-  productsApiUrl
+  productsApiUrl,
+  paginationMinLimit,
+  paginationMaxLimit
 }

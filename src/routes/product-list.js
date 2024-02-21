@@ -1,22 +1,87 @@
+const { Errors } = require('../usecases')
+
+function makePageUrl(request, page) {
+  const opts = request.routeOptions
+  const url = opts.url
+  const { limit } = request.query
+  if (page === null) {
+    return null
+  }
+  return `${url}/?page=${page}&limit=${limit}`
+}
+
 async function list(request, reply) {
-  return {}
+  const customer = await this.usecases.findCustomerById.execute(request.user.sub)
+  const customerId = customer.id
+  const { page, limit } = request.query
+
+  const products = await this.usecases.listCustomerFavoriteProducts.execute({
+    customerId, page, limit
+  })
+
+  this.log.info(`Customer ${customerId} listed favorite products`)
+
+  const currentPage = makePageUrl(request, products.currentPage)
+  const nextPage = makePageUrl(request, products.nextPage)
+  const previousPage = makePageUrl(request, products.previousPage)
+  return {
+    currentPage,
+    nextPage,
+    previousPage,
+    products: products.items
+  }
 }
 
 async function create(request, reply) {
-  const id = crypto.randomUUID()
+  const customer = await this.usecases.findCustomerById.execute(request.user.sub)
+  const customerId = customer.id
+  const productId = request.body.id
+
+  try {
+    await this.usecases.favoriteProduct.execute(customerId, productId)
+  } catch (error) {
+    if (error.message === Errors.NOT_EXISTS) {
+      return reply.code(404).send()
+    } else {
+      throw error
+    }
+  }
+
+  const product = await this.usecases.findProductById.execute(customerId, productId)
+
+  this.log.info(`Customer ${customerId} favorited product ${productId}`)
 
   reply
     .code(201)
-    .header('location', encodeURI(`/product-list/${id}`))
-    .send({ id })
+    .header('location', encodeURI(`/product-list/${productId}`))
+    .send(product)
 }
 
 async function show(request, reply) {
-  return {}
+  const customer = await this.usecases.findCustomerById.execute(request.user.sub)
+  const customerId = customer.id
+  const productId = request.params.id
+
+  const product = await this.usecases.findProductById.execute(customerId, productId)
+  if (product === null) {
+    return reply.code(404).send()
+  }
+
+  this.log.info(`Customer ${customerId} viewed product ${productId}`)
+
+  return product
 }
 
 async function destroy(request, reply) {
-  return {}
+  const customer = await this.usecases.findCustomerById.execute(request.user.sub)
+  const customerId = customer.id
+  const productId = request.params.id
+
+  await this.usecases.unfavoriteProduct.execute(customerId, productId)
+
+  this.log.info(`Customer ${customerId} unfavoried product ${productId}`)
+
+  reply.send()
 }
 
 module.exports = async (fastify, options) => {
@@ -34,7 +99,8 @@ module.exports = async (fastify, options) => {
       reply.send(err)
     }
 
-    if (!config.adminEmails.includes(request.user.email)) {
+    const customer = await fastify.usecases.findCustomerById.execute(request.user.sub)
+    if (customer === null) {
       reply.code(401).send()
     }
   })
@@ -53,15 +119,42 @@ module.exports = async (fastify, options) => {
     .prop('price', S.number())
     .prop('brand', S.string())
     .prop('image', S.string())
-    .prop('reviewScore', S.number())
+    .prop('reviewScore', S.anyOf([S.number(), S.null()]))
+  const queryListSchema = S.object()
+    .prop('page', S.number().minimum(1).required())
+    .prop(
+      'limit',
+      S.number()
+        .minimum(config.paginationMinLimit)
+        .maximum(config.paginationMaxLimit)
+        .required()
+    )
+  const responseListSchema = S.object()
+    .prop('currentPage', S.string())
+    .prop('nextPage', S.anyOf([S.string(), S.null()]))
+    .prop('previousPage', S.anyOf([S.string(), S.null()]))
+    .prop('products', S.array().items(responseSchema))
+
   const notFoundSchema = S.null().raw({ description: "Product not found" })
   const productExistsSchema = S.null().raw({ description: 'Product already exists' })
+
+  fastify.get('/:id', {
+    schema: {
+      ...baseSchema,
+      params: paramsSchema,
+      response: {
+        200: responseSchema,
+        404: notFoundSchema
+      }
+    }
+  }, show)
 
   fastify.get('/', {
     schema: {
       ...baseSchema,
+      query: queryListSchema,
       response: {
-        200: responseSchema,
+        200: responseListSchema,
       }
     }
   }, list)
@@ -77,17 +170,6 @@ module.exports = async (fastify, options) => {
     }
   }, create)
 
-  fastify.get('/:id', {
-    schema: {
-      ...baseSchema,
-      params: paramsSchema,
-      response: {
-        200: responseSchema,
-        404: notFoundSchema
-      }
-    }
-  }, list)
-
   fastify.delete('/:id', {
     schema: {
       ...baseSchema,
@@ -97,5 +179,5 @@ module.exports = async (fastify, options) => {
         404: notFoundSchema
       }
     }
-  }, list)
+  }, destroy)
 }

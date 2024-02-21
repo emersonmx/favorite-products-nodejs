@@ -1,5 +1,7 @@
 const fp = require('fastify-plugin')
 const axios = require('axios')
+
+const config = require('./config')
 const { MemoryCustomersData, MemoryCustomerProductListData } = require('./adapters/data')
 const {
   CreateCustomer,
@@ -15,7 +17,11 @@ const {
 const { AxiosProductsApiClient, MemoryCachedProductsApiClient } = require('./adapters/client/products-api-client')
 
 module.exports = fp(async function(fastify, opts) {
-  const httpClient = axios.create()
+  const httpClient = axios.create({
+    baseURL: config.productsApiUrl,
+    validateStatus: () => true
+  })
+
   const customersData = new MemoryCustomersData()
   const customerProductListData = new MemoryCustomerProductListData()
   const axiosProductApiClient = new AxiosProductsApiClient(httpClient)
