@@ -9,5 +9,8 @@ services:
       - ADMIN_JWT_SECRET=secret
       - ADMIN_EMAILS=john@example.com,admin@example.com
       - CUSTOMER_JWT_SECRET=secret
+    command: node src/server.js
+    volumes:
+      - .:/usr/src/app
     ports:
       - 3000:3000
