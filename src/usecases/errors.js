@@ -1,3 +1,4 @@
 module.exports = {
-  INTEGRITY_ERROR: 'Integrity error'
+  INTEGRITY_ERROR: 'Integrity error',
+  NOT_EXISTS: 'Not exists'
 }
