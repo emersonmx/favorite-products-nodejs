@@ -58,6 +58,17 @@ test('favorite product', async () => {
   })
 })
 
+test('favorite unknown product', async () => {
+  const productId = crypto.randomUUID()
+  const customerAxios = makeCustomerAxios(await createCustomer())
+
+  const res = await customerAxios.post('/product-list', {
+    id: productId
+  })
+
+  expect(res.status).toBe(404)
+})
+
 test('show favorite product', async () => {
   const productId = '1bf0f365-fbdd-4e21-9786-da459d78dd1f'
   const customerAxios = makeCustomerAxios(await createCustomer())
@@ -89,6 +100,18 @@ test('unfavorite product', async () => {
   expect(res.status).toBe(200)
 })
 
+test('unfavorite unknown product', async () => {
+  const productId = crypto.randomUUID()
+  const customerAxios = makeCustomerAxios(await createCustomer())
+  const favoriteRes = await customerAxios.post('/product-list', {
+    id: productId
+  })
+
+  const res = await customerAxios.delete(favoriteRes.headers.location)
+
+  expect(res.status).toBe(404)
+})
+
 test('list products', async () => {
   const products = [
     '1bf0f365-fbdd-4e21-9786-da459d78dd1f',
@@ -116,7 +139,96 @@ test('list products', async () => {
 
   expect(res.status).toBe(200)
   expect(res.data).toMatchObject({
+    currentPage: expect.any(String),
+    nextPage: null,
+    previousPage: null,
     products: expect.any(Array)
   })
 })
 
+test('validate list query everything is missing', async () => {
+  const customerAxios = makeCustomerAxios(await createCustomer())
+
+  const res = await customerAxios.get('/product-list')
+
+  expect(res.status).toBe(400)
+})
+
+test('validate list query when page is missing', async () => {
+  const customerAxios = makeCustomerAxios(await createCustomer())
+
+  const res = await customerAxios.get('/product-list', {
+    params: { limit: 10 }
+  })
+
+
+  expect(res.status).toBe(400)
+})
+
+test('validate list query when limit is missing', async () => {
+  const customerAxios = makeCustomerAxios(await createCustomer())
+
+  const res = await customerAxios.get('/product-list', {
+    params: { page: 1 }
+  })
+
+  expect(res.status).toBe(400)
+})
+
+test('validate list query when page is less than minimum', async () => {
+  const customerAxios = makeCustomerAxios(await createCustomer())
+
+  const res = await customerAxios.get('/product-list', {
+    params: {
+      page: 0,
+      limit: 10
+    }
+  })
+
+  expect(res.status).toBe(400)
+})
+
+test('validate list query when page is greater than maximum', async () => {
+  const customerAxios = makeCustomerAxios(await createCustomer())
+
+  const res = await customerAxios.get('/product-list', {
+    params: {
+      page: 1000,
+      limit: 10
+    }
+  })
+
+  expect(res.status).toBe(200)
+  expect(res.data).toMatchObject({
+    currentPage: expect.any(String),
+    nextPage: null,
+    previousPage: null,
+    products: expect.any(Array)
+  })
+})
+
+test('validate list query when limit is less than minimum', async () => {
+  const customerAxios = makeCustomerAxios(await createCustomer())
+
+  const res = await customerAxios.get('/product-list', {
+    params: {
+      page: 1,
+      limit: 0
+    }
+  })
+
+  expect(res.status).toBe(400)
+})
+
+test('validate list query when limit is greater than maximum', async () => {
+  const customerAxios = makeCustomerAxios(await createCustomer())
+
+  const res = await customerAxios.get('/product-list', {
+    params: {
+      page: 1,
+      limit: 1000
+    }
+  })
+
+  expect(res.status).toBe(400)
+})
