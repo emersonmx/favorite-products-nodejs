@@ -39,6 +39,30 @@ describe('happy path', () => {
     expect(res.data).toMatchObject(customer)
   })
 
+  test('update name', async () => {
+    const customer = makeJohn()
+    const resCreate = await axios.post('/customers', customer)
+
+    const res = await axios.put(resCreate.headers.location, {
+      name: 'John Doe',
+      email: customer.email
+    })
+
+    expect(res.status).toBe(200)
+  })
+
+  test('update email', async () => {
+    const customer = makeJohn()
+    const resCreate = await axios.post('/customers', customer)
+
+    const res = await axios.put(resCreate.headers.location, {
+      name: customer.name,
+      email: `john.${crypto.randomUUID()}@example.com`
+    })
+
+    expect(res.status).toBe(200)
+  })
+
   test('update name and email', async () => {
     const resCreate = await axios.post('/customers', makeJohn())
 
