@@ -3,11 +3,41 @@ class MemoryCustomerProductListData {
     this.database = new Map()
   }
 
-  async list(customerId) {
+  async list({ customerId, page, limit }) {
+    const items = (this.database.get(customerId) || new Set())
+    const currentPage = page
+    const nextPage = this.nextPage(items.size, page, limit)
+    const previousPage = this.previousPage(items.size, page, limit)
+    const offset = (page - 1) * limit
     return {
-      links: {},
-      products: []
+      currentPage,
+      nextPage,
+      previousPage,
+      items: Array.from(items).slice(offset, offset + limit)
     }
+  }
+
+  nextPage(count, page, limit) {
+    if (page < 1) {
+      return null
+    }
+    const offset = page * limit
+    if (offset >= count) {
+      return null
+    }
+    return page + 1
+  }
+
+  previousPage(count, page, limit) {
+    if ((page - 1) < 1) {
+      return null
+    }
+    const offset = (page - 1) * limit
+    if (offset >= count) {
+      return null
+    }
+
+    return page - 1
   }
 
   hasProduct(customerId, productId) {
