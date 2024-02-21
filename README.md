@@ -1,5 +1,12 @@
 # favorite-products-nodejs
 
+## Desenvolvimento
+
+As chaves abaixo podem ser usadas para desenvolvimento local:
+
+- Admin: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWRtaW4iLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIn0.Ina8Q62ZY5UfBAuGHDdFvF6zFlpLBOak2pgSRqaW5xQ`
+- Customer: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiIsImVtYWlsIjoiam9obkBleGFtcGxlLmNvbSJ9.vicVUMmv-_mUWQ2-1q69dq1Uh-rx5dQJXO2hcFAJ1_E`
+
 ## Decisões
 
 - Evitar configurações complicadas para as ferramentas de desenvolvimento
