@@ -11,6 +11,8 @@ async function create(request, reply) {
   const id = crypto.randomUUID()
   await this.usecases.createCustomer.execute({ id, name, email })
 
+  this.log.info(`Customer ${id} was created by ${request.user.name}`)
+
   reply
     .code(201)
     .header('location', encodeURI(`/customers/${id}`))
@@ -23,6 +25,8 @@ async function show(request, reply) {
   if (customer === null) {
     return reply.code(404).send()
   }
+
+  this.log.info(`${request.user.name} viewed user ${id}`)
 
   return customer
 }
@@ -45,6 +49,8 @@ async function update(request, reply) {
     }
   }
 
+  this.log.info(`Customer ${id} was updated by ${request.user.name}`)
+
   return { id, name, email }
 }
 
@@ -56,6 +62,8 @@ async function destroy(request, reply) {
   }
 
   await this.usecases.deleteCustomer.execute(id)
+
+  this.log.info(`Customer ${id} was deleted by ${request.user.name}`)
 
   reply.send()
 }
