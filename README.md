@@ -3,11 +3,17 @@
 ## Desenvolvimento
 
 ```sh
+# Roda o servidor local via docker compose
+# O swagger ficará disponível em http://localhost:3000/docs/
 docker compose up --build
 
-node ./scripts/generate-customer-key.js
-node ./scripts/generate-admin-key.js
+# Cria chaves JWT para usar no Swagger
+docker compose run --rm server node ./scripts/generate-admin-key.js
+docker compose run --rm server node ./scripts/generate-customer-key.js
+
 ```
+
+Acesse o [link][products-api] para a documentação de API de produtos.
 
 ## Decisões
 
@@ -24,5 +30,7 @@ node ./scripts/generate-admin-key.js
   que o Express
 - Inicialmente seguir com uma arquitetura simples
   - Infra (framework web e setup da aplicação)
-  - Casos de uso (Operações e algumas regras de negócio)
+  - Casos de uso (Operações, portas e algumas regras de negócio)
   - Adaptadores (implementa os "contratos" dos caso de uso)
+
+[products-api]: https://gist.github.com/Bgouveia/9e043a3eba439489a35e70d1b5ea08ec
