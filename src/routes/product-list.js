@@ -121,12 +121,13 @@ module.exports = async (fastify, options) => {
     .prop('image', S.string())
     .prop('reviewScore', S.anyOf([S.number(), S.null()]))
   const queryListSchema = S.object()
-    .prop('page', S.number().minimum(1).required())
+    .prop('page', S.number().minimum(1).default(1).required())
     .prop(
       'limit',
       S.number()
         .minimum(config.paginationMinLimit)
         .maximum(config.paginationMaxLimit)
+        .default(config.paginationMaxLimit)
         .required()
     )
   const responseListSchema = S.object()
