@@ -6,7 +6,7 @@
 
   const adminSignSync = createSigner({ key: config.adminJwtSecret })
 
-  const adminJwt = adminSignSync({ name: 'Admin', email: 'admin@example.com' })
+  const adminJwt = adminSignSync({ sub: 'admin@example.com', name: 'Admin' })
 
   const signSync = createSigner({ key: config.customerJwtSecret })
 

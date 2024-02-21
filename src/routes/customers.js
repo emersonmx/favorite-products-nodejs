@@ -83,7 +83,7 @@ module.exports = async (fastify, options) => {
       reply.send(err)
     }
 
-    if (!config.adminEmails.includes(request.user.email)) {
+    if (!config.adminEmails.includes(request.user.sub)) {
       reply.code(401).send()
     }
   })

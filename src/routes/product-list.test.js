@@ -5,7 +5,7 @@ const config = require('../config')
 
 const adminSignSync = createSigner({ key: config.adminJwtSecret })
 
-const adminJwt = adminSignSync({ name: 'Admin', email: 'admin@example.com' })
+const adminJwt = adminSignSync({ sub: 'admin@example.com', name: 'Admin' })
 
 const adminAxios = axios.create({
   baseURL: `http://${config.baseUrl}`,
