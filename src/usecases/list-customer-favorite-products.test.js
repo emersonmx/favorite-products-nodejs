@@ -41,3 +41,27 @@ test('list products', async () => {
 
   expect(res.items).toMatchObject(listProducts.slice(0, 2))
 })
+
+test('list empty products', async () => {
+  const customerId = crypto.randomUUID()
+  const useCase = makeUseCase()
+
+  const res = await useCase.execute({ customerId, page: 1, limit: 2 })
+
+  expect(res.items).toHaveLength(0)
+})
+
+test('list out of bounds products', async () => {
+  const customerId = crypto.randomUUID()
+  const useCase = makeUseCase()
+  makeProducts(10).forEach(async (productId) => useCase.customerProductListData.add(customerId, productId))
+
+  const res = await useCase.execute({ customerId, page: 0, limit: 2 })
+
+  expect(res).toMatchObject({
+    currentPage: 0,
+    nextPage: null,
+    previousPage: null,
+    items: []
+  })
+})
