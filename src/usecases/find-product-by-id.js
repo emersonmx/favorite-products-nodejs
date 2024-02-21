@@ -1,7 +1,7 @@
 class FindProductById {
-  constructor(customerProductListData, productApiClient) {
+  constructor(customerProductListData, productsApiClient) {
     this.customerProductListData = customerProductListData
-    this.productApiClient = productApiClient
+    this.productsApiClient = productsApiClient
   }
 
   async execute(customerId, productId) {
@@ -10,7 +10,7 @@ class FindProductById {
       return null
     }
 
-    return await this.productApiClient.findById(productId)
+    return await this.productsApiClient.findById(productId)
   }
 }
 

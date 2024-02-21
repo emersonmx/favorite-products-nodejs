@@ -1,13 +1,13 @@
 class ListCustomerFavoriteProducts {
-  constructor(customerProductListData, productApiClient) {
+  constructor(customerProductListData, productsApiClient) {
     this.customerProductListData = customerProductListData
-    this.productApiClient = productApiClient
+    this.productsApiClient = productsApiClient
   }
 
   async execute({ customerId, page, limit }) {
     const pageData = await this.customerProductListData.list({ customerId, page, limit })
     const items = await Promise.all(pageData.items.map(productId => {
-      return this.productApiClient.findById(productId)
+      return this.productsApiClient.findById(productId)
     }))
     return {
       ...pageData,

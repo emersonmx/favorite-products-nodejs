@@ -21,8 +21,8 @@ function makeMockClient() {
 function makeUseCase() {
   const mockClient = makeMockClient()
   const productListData = new MemoryCustomerProductListData()
-  const productApiClient = new MemoryCachedProductsApiClient(mockClient)
-  return new FavoriteProduct(productListData, productApiClient)
+  const productsApiClient = new MemoryCachedProductsApiClient(mockClient)
+  return new FavoriteProduct(productListData, productsApiClient)
 }
 
 test('favorite', async () => {
@@ -41,7 +41,7 @@ test('favorite unknown product', async () => {
   const customerId = crypto.randomUUID()
   const productId = crypto.randomUUID()
   const useCase = makeUseCase()
-  useCase.productApiClient.findById = async (_) => null
+  useCase.productsApiClient.findById = async (_) => null
 
   try {
     await useCase.execute(customerId, productId)

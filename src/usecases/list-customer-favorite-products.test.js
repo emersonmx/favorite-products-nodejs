@@ -20,8 +20,8 @@ function makeMockClient() {
 function makeUseCase() {
   const mockClient = makeMockClient()
   const productListData = new MemoryCustomerProductListData()
-  const productApiClient = new MemoryCachedProductsApiClient(mockClient)
-  return new ListCustomerFavoriteProducts(productListData, productApiClient)
+  const productsApiClient = new MemoryCachedProductsApiClient(mockClient)
+  return new ListCustomerFavoriteProducts(productListData, productsApiClient)
 }
 
 function makeProducts(size) {
@@ -33,7 +33,7 @@ test('list products', async () => {
   const products = makeProducts(10)
   const useCase = makeUseCase()
   const listProducts = await Promise.all(products.map(productId => {
-    return useCase.productApiClient.findById(productId)
+    return useCase.productsApiClient.findById(productId)
   }))
   products.forEach(async (productId) => useCase.customerProductListData.add(customerId, productId))
 

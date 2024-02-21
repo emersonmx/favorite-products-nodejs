@@ -20,8 +20,8 @@ function makeMockClient() {
 function makeUseCase() {
   const mockClient = makeMockClient()
   const productListData = new MemoryCustomerProductListData()
-  const productApiClient = new MemoryCachedProductsApiClient(mockClient)
-  return new FindProductById(productListData, productApiClient)
+  const productsApiClient = new MemoryCachedProductsApiClient(mockClient)
+  return new FindProductById(productListData, productsApiClient)
 }
 
 test('find a favorite product', async () => {

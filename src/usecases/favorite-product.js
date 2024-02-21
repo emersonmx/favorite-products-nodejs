@@ -1,13 +1,13 @@
 const { NOT_EXISTS } = require("./errors")
 
 class FavoriteProduct {
-  constructor(customerProductListData, productApiClient) {
+  constructor(customerProductListData, productsApiClient) {
     this.customerProductListData = customerProductListData
-    this.productApiClient = productApiClient
+    this.productsApiClient = productsApiClient
   }
 
   async execute(customerId, productId) {
-    const product = await this.productApiClient.findById(productId)
+    const product = await this.productsApiClient.findById(productId)
     if (product === null) {
       throw new Error(NOT_EXISTS)
     }
