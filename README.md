@@ -1,6 +1,17 @@
 # favorite-products-nodejs
 
-## Desenvolvimento
+API dos produtos favoritos dos clientes.
+
+Acesse o [link][products-api] para a documentação de API de produtos.
+
+## Rodar o projeto local
+
+Requerimentos:
+
+- Docker >= 24.0
+- Docker Compose >= 2.23
+
+Rode os comandos abaixo para testar o servidor localmente
 
 ```sh
 # Roda o servidor local via docker compose
@@ -10,10 +21,25 @@ docker compose up --build
 # Cria chaves JWT para usar no Swagger
 docker compose run --rm server node ./scripts/generate-admin-key.js
 docker compose run --rm server node ./scripts/generate-customer-key.js
-
 ```
 
-Acesse o [link][products-api] para a documentação de API de produtos.
+## Desenvolvimento
+
+Requerimentos:
+
+- Node.js >= 20.11 (LTS)
+
+Rode os comandos abaixo para iniciar o servidor de desenvolvimento
+
+```sh
+cp .env.example .env
+export $(grep -v '^#' .env | xargs)
+
+npm install
+npm run dev
+
+# Faça suas modificações!
+```
 
 ## Decisões
 
