@@ -8,7 +8,7 @@ class FavoriteProduct {
 
   async execute(customerId, productId) {
     const product = await this.productApiClient.findById(productId)
-    if (product !== null) {
+    if (product === null) {
       throw new Error(NOT_EXISTS)
     }
 

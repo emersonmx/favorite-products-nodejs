@@ -27,7 +27,6 @@ function makeUseCase() {
 
 test('favorite', async () => {
   const useCase = makeUseCase()
-  useCase.productApiClient.findById = async (_) => null
   const customerId = crypto.randomUUID()
   const productId = crypto.randomUUID()
 
@@ -37,15 +36,30 @@ test('favorite', async () => {
   expect(res.items).toMatchObject([productId])
 })
 
-test('favorite same product', async () => {
+test('favorite unknown product', async () => {
   expect.assertions(1)
   const customerId = crypto.randomUUID()
   const productId = crypto.randomUUID()
   const useCase = makeUseCase()
+  useCase.productApiClient.findById = async (_) => null
 
   try {
     await useCase.execute(customerId, productId)
   } catch (error) {
     expect(error.message).toBe(Errors.NOT_EXISTS)
   }
+})
+
+test('favorite same product', async () => {
+  const customerId = crypto.randomUUID()
+  const productId = crypto.randomUUID()
+  const useCase = makeUseCase()
+  const productListData = useCase.customerProductListData
+  await useCase.execute(customerId, productId)
+  const pageBefore = await productListData.list({ customerId, page: 1, limit: 10 })
+
+  await useCase.execute(customerId, productId)
+
+  const pageAfter = await productListData.list({ customerId, page: 1, limit: 10 })
+  expect(pageAfter.items).toMatchObject(pageBefore.items)
 })
