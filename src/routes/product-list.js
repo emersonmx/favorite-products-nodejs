@@ -125,9 +125,9 @@ module.exports = async (fastify, options) => {
     .prop(
       'limit',
       S.number()
-        .minimum(config.paginationMinLimit)
-        .maximum(config.paginationMaxLimit)
-        .default(config.paginationMaxLimit)
+        .minimum(config.minPageLimit)
+        .maximum(config.maxPageLimit)
+        .default(config.defaultPageLimit)
         .required()
     )
   const responseListSchema = S.object()

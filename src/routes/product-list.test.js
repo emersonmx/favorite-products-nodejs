@@ -146,15 +146,15 @@ test('list products', async () => {
   })
 })
 
-test('validate list query everything is missing', async () => {
+test('list products when query is missing everything', async () => {
   const customerAxios = makeCustomerAxios(await createCustomer())
 
   const res = await customerAxios.get('/product-list')
 
-  expect(res.status).toBe(400)
+  expect(res.status).toBe(200)
 })
 
-test('validate list query when page is missing', async () => {
+test('list products when page in query is missing', async () => {
   const customerAxios = makeCustomerAxios(await createCustomer())
 
   const res = await customerAxios.get('/product-list', {
@@ -162,20 +162,20 @@ test('validate list query when page is missing', async () => {
   })
 
 
-  expect(res.status).toBe(400)
+  expect(res.status).toBe(200)
 })
 
-test('validate list query when limit is missing', async () => {
+test('list products when limit in query is missing', async () => {
   const customerAxios = makeCustomerAxios(await createCustomer())
 
   const res = await customerAxios.get('/product-list', {
     params: { page: 1 }
   })
 
-  expect(res.status).toBe(400)
+  expect(res.status).toBe(200)
 })
 
-test('validate list query when page is less than minimum', async () => {
+test('list when page is less than minimum', async () => {
   const customerAxios = makeCustomerAxios(await createCustomer())
 
   const res = await customerAxios.get('/product-list', {
@@ -188,7 +188,7 @@ test('validate list query when page is less than minimum', async () => {
   expect(res.status).toBe(400)
 })
 
-test('validate list query when page is greater than maximum', async () => {
+test('list when page is greater than maximum', async () => {
   const customerAxios = makeCustomerAxios(await createCustomer())
 
   const res = await customerAxios.get('/product-list', {
@@ -207,7 +207,7 @@ test('validate list query when page is greater than maximum', async () => {
   })
 })
 
-test('validate list query when limit is less than minimum', async () => {
+test('list when limit is less than minimum', async () => {
   const customerAxios = makeCustomerAxios(await createCustomer())
 
   const res = await customerAxios.get('/product-list', {
@@ -220,7 +220,7 @@ test('validate list query when limit is less than minimum', async () => {
   expect(res.status).toBe(400)
 })
 
-test('validate list query when limit is greater than maximum', async () => {
+test('list when limit is greater than maximum', async () => {
   const customerAxios = makeCustomerAxios(await createCustomer())
 
   const res = await customerAxios.get('/product-list', {
