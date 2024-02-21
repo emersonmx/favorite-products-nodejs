@@ -1,4 +1,12 @@
+const fs = require('node:fs');
 const config = require('./config')
+
+let swaggerDescription
+try {
+  swaggerDescription = fs.readFileSync('./docs/swagger-description.md', 'utf8')
+} catch (error) {
+  swaggerDescription = 'Uma API dos produtos favoritos do cliente.'
+}
 
 const fastify = require('fastify')({
   logger: true
@@ -11,7 +19,7 @@ fastify.register(require('@fastify/swagger'), {
   openapi: {
     info: {
       title: 'Favorite Products',
-      description: 'An API to favorite customer products.',
+      description: swaggerDescription,
       version: config.version
     },
     components: {
