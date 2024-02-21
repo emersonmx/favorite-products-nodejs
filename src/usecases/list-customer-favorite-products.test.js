@@ -1,5 +1,5 @@
 const { MemoryCustomerProductListData } = require("../adapters/data/customer-product-list-data")
-const ListFavoriteProducts = require("./list-favorite-products")
+const ListCustomerFavoriteProducts = require("./list-customer-favorite-products")
 const { MemoryCachedProductsApiClient } = require("../adapters/client/products-api-client")
 
 function makeMockClient() {
@@ -21,7 +21,7 @@ function makeUseCase() {
   const mockClient = makeMockClient()
   const productListData = new MemoryCustomerProductListData()
   const productApiClient = new MemoryCachedProductsApiClient(mockClient)
-  return new ListFavoriteProducts(productListData, productApiClient)
+  return new ListCustomerFavoriteProducts(productListData, productApiClient)
 }
 
 function makeProducts(size) {

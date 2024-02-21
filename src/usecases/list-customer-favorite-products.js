@@ -1,4 +1,4 @@
-class ListFavoriteProducts {
+class ListCustomerFavoriteProducts {
   constructor(customerProductListData, productApiClient) {
     this.customerProductListData = customerProductListData
     this.productApiClient = productApiClient
@@ -16,4 +16,4 @@ class ListFavoriteProducts {
   }
 }
 
-module.exports = ListFavoriteProducts
+module.exports = ListCustomerFavoriteProducts
