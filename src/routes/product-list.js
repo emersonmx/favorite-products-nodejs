@@ -7,7 +7,7 @@ function makePageUrl(request, page) {
   if (page === null) {
     return null
   }
-  return `${url}/?page=${page}&limit=${limit}`
+  return `${url}?page=${page}&limit=${limit}`
 }
 
 async function list(request, reply) {
