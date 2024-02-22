@@ -69,4 +69,8 @@ npm run dev
 
 ...
 
+## Melhorias
+
+...
+
 [products-api]: https://gist.github.com/Bgouveia/9e043a3eba439489a35e70d1b5ea08ec
