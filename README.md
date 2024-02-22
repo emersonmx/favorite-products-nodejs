@@ -41,10 +41,6 @@ npm run dev
 # Faça suas modificações!
 ```
 
-## Arquitetura
-
-...
-
 ## Decisões
 
 - Evitar configurações complicadas para as ferramentas de desenvolvimento
@@ -65,12 +61,5 @@ npm run dev
   - Casos de uso (Operações, portas e algumas regras de negócio)
   - Adaptadores (implementação dos contratos dos caso de uso)
 
-## Dívidas
-
-...
-
-## Melhorias
-
-...
-
 [products-api]: https://gist.github.com/Bgouveia/9e043a3eba439489a35e70d1b5ea08ec
+[fastify]: https://fastify.dev/
