@@ -1,3 +1,5 @@
+const { LRUCache } = require('lru-cache')
+
 class AxiosProductsApiClient {
   constructor(httpClient) {
     this.httpClient = httpClient
@@ -13,9 +15,11 @@ class AxiosProductsApiClient {
 }
 
 class MemoryCachedProductsApiClient {
-  constructor(productsApiClient) {
+  constructor(productsApiClient, maxItems) {
     this.productsApiClient = productsApiClient
-    this.memory = new Map()
+    this.memory = new LRUCache({
+      max: maxItems
+    })
   }
 
   async findById(id) {

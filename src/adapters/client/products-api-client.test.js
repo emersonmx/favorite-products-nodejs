@@ -57,7 +57,7 @@ test('find a product by id and cache it', async () => {
     })
   }
   const axiosClient = new AxiosProductsApiClient(mockClient)
-  const client = new MemoryCachedProductsApiClient(axiosClient)
+  const client = new MemoryCachedProductsApiClient(axiosClient, 10)
 
   await client.findById(id)
   await client.findById(id)

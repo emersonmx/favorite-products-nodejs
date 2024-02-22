@@ -25,7 +25,9 @@ module.exports = fp(async function(fastify, opts) {
   const customersData = new MemoryCustomersData()
   const customerProductListData = new MemoryCustomerProductListData()
   const axiosProductApiClient = new AxiosProductsApiClient(httpClient)
-  const productsApiClient = new MemoryCachedProductsApiClient(axiosProductApiClient)
+  const productsApiClient = new MemoryCachedProductsApiClient(
+    axiosProductApiClient, config.maxCachedProducts
+  )
   const usecases = {
     createCustomer: new CreateCustomer(customersData),
     deleteCustomer: new DeleteCustomer(customersData),

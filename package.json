@@ -21,7 +21,8 @@
         "axios": "^1.6.7",
         "fastify": "^4.26.1",
         "fastify-plugin": "^4.5.1",
-        "fluent-json-schema": "^4.2.1"
+        "fluent-json-schema": "^4.2.1",
+        "lru-cache": "^10.2.0"
     },
     "devDependencies": {
         "@babel/cli": "^7.23.9",
