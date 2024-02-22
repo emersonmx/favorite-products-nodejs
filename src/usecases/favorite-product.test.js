@@ -8,7 +8,6 @@ function makeMockClient() {
     findById: async (id) => {
       return {
         id,
-        brand: 'a-brand',
         image: `http://example.com/images/${id}.jpg`,
         price: 1.99,
         reviewScore: 3.14,

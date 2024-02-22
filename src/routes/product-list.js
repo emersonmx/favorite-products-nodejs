@@ -127,7 +127,6 @@ module.exports = async (fastify, options) => {
     .prop('id', S.string().format(S.FORMATS.UUID))
     .prop('title', S.string())
     .prop('price', S.number())
-    .prop('brand', S.string())
     .prop('image', S.string())
     .prop('reviewScore', S.anyOf([S.number(), S.null()]))
   const queryListSchema = S.object()

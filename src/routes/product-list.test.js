@@ -53,7 +53,6 @@ test('favorite product', async () => {
     id: productId,
     title: expect.any(String),
     price: expect.any(Number),
-    brand: expect.any(String),
     image: expect.any(String),
   })
 })
@@ -93,7 +92,6 @@ test('show favorite product', async () => {
     id: productId,
     title: expect.any(String),
     price: expect.any(Number),
-    brand: expect.any(String),
     image: expect.any(String),
   })
 })
