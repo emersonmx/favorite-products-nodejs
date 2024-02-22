@@ -37,6 +37,11 @@ async function create(request, reply) {
   const customerId = customer.id
   const productId = request.body.id
 
+  let product = await this.usecases.findProductById.execute(customerId, productId)
+  if (product !== null) {
+    return reply.code(409).send()
+  }
+
   try {
     await this.usecases.favoriteProduct.execute(customerId, productId)
   } catch (error) {
@@ -47,7 +52,7 @@ async function create(request, reply) {
     }
   }
 
-  const product = await this.usecases.findProductById.execute(customerId, productId)
+  product = await this.usecases.findProductById.execute(customerId, productId)
 
   this.log.info(`Customer ${customerId} favorited product ${productId}`)
 
@@ -76,6 +81,11 @@ async function destroy(request, reply) {
   const customer = await this.usecases.findCustomerById.execute(request.user.sub)
   const customerId = customer.id
   const productId = request.params.id
+
+  const product = await this.usecases.findProductById.execute(customerId, productId)
+  if (product === null) {
+    return reply.code(404).send()
+  }
 
   await this.usecases.unfavoriteProduct.execute(customerId, productId)
 
@@ -166,6 +176,7 @@ module.exports = async (fastify, options) => {
       body: baseBodySchema,
       response: {
         201: responseSchema,
+        404: notFoundSchema,
         409: productExistsSchema
       }
     }

@@ -58,6 +58,16 @@ test('favorite product', async () => {
   })
 })
 
+test('favorite same product', async () => {
+  const productId = '1bf0f365-fbdd-4e21-9786-da459d78dd1f'
+  const customerAxios = makeCustomerAxios(await createCustomer())
+  await customerAxios.post('/product-list', { id: productId })
+
+  const res = await customerAxios.post('/product-list', { id: productId })
+
+  expect(res.status).toBe(409)
+})
+
 test('favorite unknown product', async () => {
   const productId = crypto.randomUUID()
   const customerAxios = makeCustomerAxios(await createCustomer())
@@ -103,11 +113,8 @@ test('unfavorite product', async () => {
 test('unfavorite unknown product', async () => {
   const productId = crypto.randomUUID()
   const customerAxios = makeCustomerAxios(await createCustomer())
-  const favoriteRes = await customerAxios.post('/product-list', {
-    id: productId
-  })
 
-  const res = await customerAxios.delete(favoriteRes.headers.location)
+  const res = await customerAxios.delete(`/product-list/${productId}`)
 
   expect(res.status).toBe(404)
 })
