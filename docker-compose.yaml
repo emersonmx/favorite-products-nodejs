@@ -9,7 +9,7 @@ services:
       - ADMIN_JWT_SECRET=secret
       - ADMIN_EMAILS=john@example.com,admin@example.com
       - CUSTOMER_JWT_SECRET=secret
-    command: node src/server.js
+    command: npm run dev
     volumes:
       - .:/usr/src/app
     ports:
